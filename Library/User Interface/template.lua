@@ -5,7 +5,7 @@ local Core = Library:Init({
 	Name = "Infinixity";
 	--Parent = LocalPlayer.PlayerGui;
 	Theme = {
-		Primary = { -- 6
+		Primary = { -- 7
 			{
 				Color = Color3.fromRGB(10, 10, 10);
 				Gradient = Color3.fromRGB(173, 254, 151);
@@ -30,6 +30,10 @@ local Core = Library:Init({
 				Color = Color3.fromRGB(255, 255, 255);
 				Gradient = Color3.fromRGB(255, 255, 255);
 			};
+			{
+				Color = Color3.fromRGB(0, 0, 0);
+				Gradient = Color3.fromRGB(0, 0, 0);
+			}
 		};
 		Secondary = { -- 6
 			{
