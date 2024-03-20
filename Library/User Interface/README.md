@@ -10,3 +10,6 @@ Theme:
 
 ![Screenshot_20240320-200335](https://github.com/Hosvile/InfiniX/assets/100496294/bf5b90e4-ac02-40c5-b1d8-1100e5191a11)
 ![Screenshot_20240320-200325](https://github.com/Hosvile/InfiniX/assets/100496294/06d0692d-6e95-40a1-b104-057217af299d)
+
+Soon:
+ - Replaceable Logo
