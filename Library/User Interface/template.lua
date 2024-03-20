@@ -4,7 +4,7 @@ local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Hosvi
 local Core = Library:Init({
 	Name = "Infinixity";
 	Parent = LocalPlayer.PlayerGui;
-	Theme_ = {
+	Theme = {
 		Primary = { -- 6
 			{
 				Color = Color3.fromRGB(10, 10, 10);
