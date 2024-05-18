@@ -60,7 +60,6 @@ function Utility.Create(self, Data)
 		for Property, Value in pairs(v[3]) do
 			if Property ~= "Parent" then
 				if type(Value) == "table" then
-					print(Property)
 					Instances[v[1]][Property] = Instances[Value[1]]
 				else
 					Instances[v[1]][Property] = Value
@@ -2200,7 +2199,6 @@ local Core = Library:Init({
             };
         };
     }
-
 })
 
 Core:Validate({
@@ -2429,3 +2427,5 @@ for i = 1, 1 do
 end
 --]]
 -- Template
+
+return Library
