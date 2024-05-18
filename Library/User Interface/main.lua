@@ -15,7 +15,7 @@ local LocalPlayer = Players.LocalPlayer
 --References
 local RunService = service.RunService
 local CoreGui = service.CoreGui
-CoreGui = LocalPlayer.PlayerGui
+--CoreGui = LocalPlayer.PlayerGui
 local TweenService = service.TweenService
 local UserInputService = service.UserInputService
 
@@ -60,6 +60,7 @@ function Utility.Create(self, Data)
 		for Property, Value in pairs(v[3]) do
 			if Property ~= "Parent" then
 				if type(Value) == "table" then
+					print(Property)
 					Instances[v[1]][Property] = Instances[Value[1]]
 				else
 					Instances[v[1]][Property] = Value
@@ -93,49 +94,66 @@ function Utility.Input(self, Input, Move)
 	return false
 end
 
-function Utility.Hover(self, Object)
+function Utility.Hover(self, Object, Size)
 	local Hover = {}
+
 	Object.InputBegan:Connect(function(Input, Processed)
 		for key, value in pairs(Hover) do
 			value:Destroy()
 			rawset(Hover, key, nil)
 		end
-		
+
 		if Utility:Input(Input) then
 			if #Hover < 1 then
 				Hover.Frame = Utility:Create({
 					{1, "Frame", {Name = "Highlight", Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(1, 0, 1, 0), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0.5, 0, 0.5, 0), BackgroundColor3 = Color3.fromRGB(255, 255, 255), BackgroundTransparency = 0.8, Parent = Object}};
 				})
-				
+
 				if Object:FindFirstChildWhichIsA("UIGradient") then
 					Object:FindFirstChildWhichIsA("UIGradient"):Clone().Parent = Hover.Frame
 				end
-				
+
 				if Object:FindFirstChildWhichIsA("UICorner") then
 					Object:FindFirstChildWhichIsA("UICorner"):Clone().Parent = Hover.Frame
 				end
-				
+
+				--[[
 				Hover.UIScale = Utility:Create({
 					{1, "UIScale", {Scale = 1.1, Parent = Object}};
 				})
+				]]
+
+				Hover.UIStroke = Utility:Create({
+					{1, "UIStroke", {Color = Color3.fromRGB(255, 255, 255), Thickness = 1, Transparency = 0.5, Parent = Object}};
+				})
+
+				Object.Size = UDim2.new(Size.X * 1.1, 0, Size.Y * 1.1, 0)
 			end
 		else
 			if #Hover < 1 then
 				Hover.Frame = Utility:Create({
 					{1, "Frame", {Name = "Darklight", Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(1, 0, 1, 0), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0.5, 0, 0.5, 0), BackgroundColor3 = Color3.fromRGB(0, 0, 0), BackgroundTransparency = 0.8, Parent = Object}};
 				})
-				
+
 				if Object:FindFirstChildWhichIsA("UIGradient") then
 					Object:FindFirstChildWhichIsA("UIGradient"):Clone().Parent = Hover.Frame
 				end
-				
+
 				if Object:FindFirstChildWhichIsA("UICorner") then
 					Object:FindFirstChildWhichIsA("UICorner"):Clone().Parent = Hover.Frame
 				end
-				
+
+				--[[
 				Hover.UIScale = Utility:Create({
 					{1, "UIScale", {Scale = 1.1, Parent = Object}};
 				})
+				]]
+
+				Hover.UIStroke = Utility:Create({
+					{1, "UIStroke", {Color = Color3.fromRGB(0, 0, 0), Thickness = 1, Transparency = 0.5, Parent = Object}};
+				})
+
+				Object.Size = UDim2.new(Size.X * 1.1, 0, Size.Y * 1.1, 0)
 			end
 		end
 	end)
@@ -145,6 +163,8 @@ function Utility.Hover(self, Object)
 			value:Destroy()
 			rawset(Hover, key, nil)
 		end
+
+		Object.Size = UDim2.new(Size.X, 0, Size.Y, 0)
 	end)
 end
 
@@ -330,10 +350,12 @@ function Library.Init(self, Data)
 		end;
 	}, Core)
 
+	Data.self = Core.Table
+
 	Core.Objects = {}
 
 	Core.Objects.Folder = Utility:Create({
-		{1, "Folder", {Name = Data.Name, Parent = CoreGui}};
+		{1, "Folder", {Name = Data.Name, Parent = Data.Parent or CoreGui}};
 	})
 
 	Core.Objects.Main = Utility:Create({
@@ -389,13 +411,15 @@ function Library.Init(self, Data)
 			end;
 		}, Option_Interface)
 
+		Data.self = Option_Interface.Table
+
 		Option_Interface.Objects = {}
 
 		local SizeX = (Size.X / Size.XX)
 		local SizeY = (Size.Y / Size.XX)
 
 		Option_Interface.Objects.Pager = Utility:Create({
-			{1, "TextButton", {Name = "Pager_" .. Data.Name, AutoButtonColor = false, Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXX, Size = UDim2.new(SizeX, 0, SizeY, 0), AnchorPoint = Vector2.new(0, 0), Position = UDim2.new(0, 0, 0, 0), BackgroundColor3 = Library.Theme.Primary[3].Color, BackgroundTransparency = 0, Text = "", Parent = Parent}};
+			{1, "TextButton", {Name = "Pager_" .. Data.Name, AutoButtonColor = false, Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXX, Size = UDim2.new(SizeX, 0, SizeY, 0), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0, 0, 0, 0), BackgroundColor3 = Library.Theme.Primary[3].Color, BackgroundTransparency = 0, Text = "", Parent = Parent}};
 			{2, "ImageButton", {Name = "Box", AutoButtonColor = false, Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeYY, Size = UDim2.new(1, 0, 1, 0), AnchorPoint = Vector2.new(0, 0), Position = UDim2.new(0, 0, 0, 0), BackgroundColor3 = Library.Theme.Primary[6].Color, BackgroundTransparency = 0, Image = Data.Asset or "", Parent = {1}}};
 			{3, "Frame", {Name = "Icon", Active = false, Rotation = 0, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(15/25, 0, 15/25, 0), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0.5, 0, 0.5, 0), BackgroundColor3 = Library.Theme.Primary[6].Color, BackgroundTransparency = 0, Parent = {2}}};
 			{4, "ImageLabel", {Name = "Glow", Visible = false, Active = false, Rotation = -45, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(3, 0, 3, 0), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0.5, 0, 0.5, 0), BackgroundColor3 = Library.Theme.Primary[7].Color, BackgroundTransparency = 1, Image = "rbxassetid://15578039991", ImageTransparency = 0.75, Parent = {3}}};
@@ -450,6 +474,8 @@ function Library.Init(self, Data)
 			end;
 		}, Option_Interface)
 
+		Data.self = Option_Interface.Table
+
 		Option_Interface.Objects = {}
 
 		Option_Interface.Objects.Prompt = Utility:Create({
@@ -473,6 +499,8 @@ function Library.Init(self, Data)
 				end
 			end;
 		}, Notification)
+
+		Data.self = Notification.Table
 
 		Notification.Objects = {}
 
@@ -507,10 +535,12 @@ function Library.Init(self, Data)
 					end;
 				}, Notification)
 
+				Button.self = Interface.Table
+
 				Interface.Objects = {}
 
 				Interface.Objects.Receiver = Utility:Create({
-					{1, "ImageButton", {Name = "Input_" .. Button.Name, AutoButtonColor = false, Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(50/175, 0, 20/110, 0), AnchorPoint = Vector2.new(1, 1), Position = UDim2.new((170 - ((50 + 5) * (Index - 1)))/175, 0, (105)/110, 0), BackgroundColor3 = Library.Theme.Primary[3].Color, BackgroundTransparency = 0, Parent = Notification.Objects.Frame}};
+					{1, "ImageButton", {Name = "Input_" .. Button.Name, AutoButtonColor = false, Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(50/175, 0, 20/110, 0), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new((175/175) - (((50 + 10)/175)/2) - ((50 + 5)/175) * (Index - 1), 0, (95)/110, 0), BackgroundColor3 = Library.Theme.Primary[3].Color, BackgroundTransparency = 0, Parent = Notification.Objects.Frame}};
 					{2, "UICorner", {CornerRadius = UDim.new(0.15, 0), Parent = {1}}};
 				})
 
@@ -518,6 +548,8 @@ function Library.Init(self, Data)
 					{1, "Frame", {Name = "TitleContainer", Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(50/50, 0, 10/20, 0), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0.5, 0, 0.5, 0), BackgroundColor3 = Library.Theme.Secondary[3].Color, BackgroundTransparency = 1, Parent = Interface.Objects.Receiver}};
 					{2, "TextLabel", {Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(1, 0, 1, 0), AnchorPoint = Vector2.new(0, 0), Position = UDim2.new(0, 0, 0, 0), BackgroundColor3 = Library.Theme.Primary[7].Color, BackgroundTransparency = 1, Font = Enum.Font.TitilliumWeb, TextScaled = true, TextWrapped = true, TextXAlignment = Enum.TextXAlignment.Center, Text = Button.Name or "", TextSize = 18, TextColor3 = Library.Theme.Primary[6].Color, Parent = {1}}};
 				})
+
+				Utility:Hover(Interface.Objects.Receiver, {X = 50/175, Y = 20/110})
 
 				Utility:OnClick(Interface.Objects.Receiver, function()
 					Button.Function(Button)
@@ -562,6 +594,8 @@ function Library.Init(self, Data)
 			end;
 		}, Core)
 
+		Data.self = Validate.Table
+
 		Validate.Objects = {}
 
 		Validate.Objects.Folder = Utility:Create({
@@ -587,11 +621,11 @@ function Library.Init(self, Data)
 		})
 
 		Validate.Objects.Logo = Utility:Create({
-			{1, "ImageButton", {Name = "Logo", AutoButtonColor = false, Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXX, Size = UDim2.new(20/300, 0, 20/300, 0), AnchorPoint = Vector2.new(0, 0), Position = UDim2.new(270/300, 0, 6/200, 0), BackgroundColor3 = Library.Theme.Primary[6].Color, BackgroundTransparency = 1, Image = "rbxassetid://15573193338", Parent = Validate.Objects.Main}};
+			{1, "ImageButton", {Name = "Logo", AutoButtonColor = false, Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXX, Size = UDim2.new(20/300, 0, 20/300, 0), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(280/300, 0, 16/200, 0), BackgroundColor3 = Library.Theme.Primary[6].Color, BackgroundTransparency = 1, Image = "rbxassetid://15573193338", Parent = Validate.Objects.Main}};
 		})
-		
-		Utility:Hover(Validate.Objects.Logo)
-		
+
+		Utility:Hover(Validate.Objects.Logo, {X = 20/300, Y = 20/300})
+
 		Validate.Objects.Logo.MouseButton1Click:Connect(function()
 			for _, obj in pairs(Validate.Objects) do
 				obj:Destroy()
@@ -614,16 +648,20 @@ function Library.Init(self, Data)
 		})
 
 		Validate.Objects.Login = (Library.Create:Pager(Validate.Objects.Main, Data, {XX = 300, X = 150, Y = 25})).Objects.Pager
-		
+
 		Validate.Objects.Login.TitleContainer.TextLabel.Text = ""
 
 		Validate.Objects.Login.AnchorPoint = Vector2.new(0.5, 0.5)
 		Validate.Objects.Login.Position = UDim2.new(0.55, 0, 0.75, 0)
-		
-		Utility:Hover(Validate.Objects.Login)
-		
+
+		Utility:Hover(Validate.Objects.Login, {X = 150/300, Y = 25/300})
+
+		Utility:OnClick(Validate.Objects.Login, function()
+			Data.Function(Data, Data.Text, true)
+		end)
+
 		Validate.Objects.Bar = Utility:Create({
-			{1, "Frame", {Name = "Bar", Active = true, ClipsDescendants = true, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(1, 0, 35/200, 0), AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.new(0.5, 0, 165/200, 0), BackgroundColor3 = Library.Theme.Secondary[5].Color, BackgroundTransparency = 0.125, Parent = Validate.Objects.Canvas}};
+			{1, "Frame", {Name = "Bar", Active = true, ClipsDescendants = true, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(300/300, 0, 35/200, 0), AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.new(0.5, 0, 165/200, 0), BackgroundColor3 = Library.Theme.Secondary[5].Color, BackgroundTransparency = 0.125, Parent = Validate.Objects.Canvas}};
 			{3, "UIPadding", {PaddingLeft = UDim.new(5/300, 0), Parent = {1}}};
 		})
 
@@ -653,18 +691,76 @@ function Library.Init(self, Data)
 				end;
 			}, Validate)
 
+			Data.self = Interface.Table
+
 			Interface.Objects = {}
 
-			Interface.Objects.Receiver = Utility:Create({
-				{1, "ImageButton", {Name = "Input_" .. Data.Name, AutoButtonColor = false, Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeYY, Size = UDim2.new(27.5/35, 0, 27.5/35, 0), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0, 0, 0, 0), BackgroundColor3 = Library.Theme.Secondary[5].Color, BackgroundTransparency = 0, Image = Button.Image or "", Parent = Validate.Objects.Buttons}};
-				{2, "UICorner", {CornerRadius = UDim.new(0.25, 0), Parent = {1}}};
+			Interface.Objects.Container = Utility:Create({
+				{1, "Frame", {Name = "Container", Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeYY, Size = UDim2.new(27.5/35, 0, 27.5/35, 0), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0, 0, 0, 0), BackgroundColor3 = Library.Theme.Secondary[5].Color, BackgroundTransparency = 0, ZIndex = 2, Parent = Validate.Objects.Buttons}};
+				{2, "UIStroke", {Color = Library.Theme.Primary[3].Color, Thickness = 1, Transparency = 0.5, Parent = {1}}};
 			})
-			
-			Utility:Hover(Interface.Objects.Receiver)
-			
+
+			Interface.Objects.Receiver = Utility:Create({
+				{1, "ImageButton", {Name = "Input_" .. Data.Name, AutoButtonColor = false, Active = false, BorderSizePixel = 1, SizeConstraint = Enum.SizeConstraint.RelativeYY, Size = UDim2.new(27.5/27.5, 0, 27.5/27.5, 0), AnchorPoint = Vector2.new(0, 0), Position = UDim2.new(0, 0, 0, 0), BackgroundColor3 = Library.Theme.Secondary[5].Color, BackgroundTransparency = 0, Image = Button.Image or "", ZIndex = 2, Parent = Interface.Objects.Container}};
+				{2, "UICorner", {CornerRadius = UDim.new(0.25, 0), Parent = {1}}};
+				{3, "UIStroke", {Color = Library.Theme.Primary[7].Color, Thickness = 1, Transparency = 0.5, Parent = {1}}};
+			})
+
+			if Data.Tutorial then
+				task.spawn(function()
+					while Interface.Objects.Container do
+						Interface.Objects.Container.BackgroundColor3 = Library.Theme.Primary[4].Color
+						task.wait(0.5)
+
+						Interface.Objects.Container.BackgroundColor3 = Library.Theme.Secondary[5].Color
+						task.wait(0.5)
+					end
+				end)
+			end
+
+			--[[
+			Interface.Objects.ButtonsHighlight = Utility:Create({
+				{1, "Frame", {Name = "Highlight", Active = true, BorderSizePixel = 2, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(1, 0, 1, 0), Position = UDim2.new(0, 0, 0, 0), BorderColor3 = Library.Theme.Primary[5].Color, BackgroundColor3 = Library.Theme.Primary[5].Color, BackgroundTransparency = 0.5, ZIndex = 1, Parent = Interface.Objects.Receiver}};
+			})
+			]]
+
+			Utility:Hover(Interface.Objects.Container, {X = 27.5/35, Y = 27.5/35})
+
 			Utility:OnClick(Interface.Objects.Receiver, function()
 				Button.Function(Button)
 			end)
+		end
+
+		if Data.Tutorial then
+			Core:Notify({
+				Name = "Infinixity";
+				Title = "Get Key";
+				Body = "To get key click the highlighted flashing buttons.";
+				Duration = 25;
+				Buttons = {
+					{
+						Name = "Got it!";
+						Function = function(self)
+							self.self:Destroy()
+						end;
+					};
+				}
+			})
+
+			Core:Notify({
+				Name = "Infinixity";
+				Title = "Validate Key";
+				Body = "To validate key click the textbox with a horizontal bar on it.";
+				Duration = 25;
+				Buttons = {
+					{
+						Name = "Got it!";
+						Function = function(self)
+							self.self:Destroy()
+						end;
+					};
+				}
+			})
 		end
 
 		local function Callback()
@@ -736,11 +832,15 @@ function Library.Init(self, Data)
 					Prompt:Destroy()
 				end
 			else
-				error("Section.CreateSlider > Missing Data.Function")
+				error("Core.Validate > Missing Data.Function")
 			end
 		end
 
-		Callback()
+		if Data.Init then
+			Data.Function(Data, Data.Text, true)
+		else
+			Callback()
+		end
 
 		Validate.Objects.Receiver.MouseButton1Click:Connect(Callback)
 
@@ -767,6 +867,8 @@ function Library.Init(self, Data)
 			end;
 		}, Window)
 
+		Data.self = Window.Table
+
 		Window.Objects = {}
 
 		Window.Objects.Folder = Utility:Create({
@@ -791,7 +893,7 @@ function Library.Init(self, Data)
 		})
 
 		Window.Objects.Maximize = Utility:Create({
-			{1, "Frame", {Name = "Maximize_" .. Data.Name, Visible = false, Active = true, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(50/1143.503, 0, 50/513.318, 0), AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.new(0.5, 0, 450/513.318, 0), BackgroundColor3 = Library.Theme.Primary[7].Color, BackgroundTransparency = 0.5, Parent = Window.Objects.Control}};
+			{1, "Frame", {Name = "Maximize_" .. Data.Name, Visible = false, Active = true, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(50/1143.503, 0, 50/513.318, 0), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0.5, 0, 450/513.318, 0), BackgroundColor3 = Library.Theme.Primary[7].Color, BackgroundTransparency = 0.5, Parent = Window.Objects.Control}};
 			{2, "TextButton", {AutoButtonColor = false, Active = true, ZIndex = 2, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(1, 0, 1, 0), AnchorPoint = Vector2.new(0, 0), Position = UDim2.new(0, 0, 0, 0), BackgroundTransparency = 1, BackgroundColor3 = Library.Theme.Primary[7].Color, Text = "", Parent = {1}}};
 			{3, "ImageButton", {AutoButtonColor = false, Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeYY, Size = UDim2.new(0.24, 0, 0.24, 0), AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.new(0.5, 0, 0.24, 0), BackgroundColor3 = Library.Theme.Primary[1].Color, Parent = {1}}};
 			--{3, "UICorner", {CornerRadius = UDim.new(0.1, 0), Parent = {1}}};
@@ -803,7 +905,7 @@ function Library.Init(self, Data)
 		})
 
 		Window.Objects.Minimize = Utility:Create({
-			{1, "Frame", {Name = "Minimize", Active = true, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(50/609, 0, 50/381, 0), AnchorPoint = Vector2.new(0, 0), Position = UDim2.new(553/609, 0, 387/381, 0), BackgroundColor3 = Library.Theme.Primary[7].Color, BackgroundTransparency = 1, Parent = Window.Objects.Window}};
+			{1, "Frame", {Name = "Minimize", Active = true, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(50/609, 0, 50/381, 0), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(578/609, 0, 412/381, 0), BackgroundColor3 = Library.Theme.Primary[7].Color, BackgroundTransparency = 1, Parent = Window.Objects.Window}};
 			{2, "TextButton", {AutoButtonColor = false, Active = true, ZIndex = 2, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(1, 0, 1, 0), AnchorPoint = Vector2.new(0, 0), Position = UDim2.new(0, 0, 0, 0), BackgroundTransparency = 1, BackgroundColor3 = Library.Theme.Primary[7].Color, Text = "", Parent = {1}}};
 			{3, "ImageButton", {Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(0.24, 0, 0.24, 0), AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.new(0.5, 0, 0.24, 0), BackgroundColor3 = Library.Theme.Primary[1].Color, Parent = {1}}};
 			--{3, "UICorner", {CornerRadius = UDim.new(0.1, 0), Parent = {1}}};
@@ -855,10 +957,10 @@ function Library.Init(self, Data)
 		end)
 
 		-- Receiver
-		Utility:Hover(Window.Objects.Maximize)
-		
-		Utility:Hover(Window.Objects.Minimize)
-		
+		Utility:Hover(Window.Objects.Maximize, {X = 50/1143.503, Y = 50/513.318})
+
+		Utility:Hover(Window.Objects.Minimize, {X = 50/609, Y = 50/381})
+
 		local Body
 		Utility:OnClick(Window.Objects.Maximize.TextButton, function()
 			Window.Objects.Canvas.Position = UDim2.new(0.5, 0, 0.5, 0)
@@ -873,7 +975,7 @@ function Library.Init(self, Data)
 			end); Body:Play()
 
 			TweenService:Create(Window.Objects.Maximize, Tween_Info, {BackgroundTransparency = 0.5}):Play()
-			TweenService:Create(Window.Objects.Maximize, Tween_Info, {Position = UDim2.new(0.5, 0, 450/513.318, 0)}):Play()
+			TweenService:Create(Window.Objects.Maximize, Tween_Info, {Position = UDim2.new(0.5, 0, 475/513.318, 0)}):Play()
 
 			Window.Objects.Maximize.Visible = false
 		end)
@@ -890,7 +992,7 @@ function Library.Init(self, Data)
 
 			Window.Objects.Maximize.Visible = true
 
-			TweenService:Create(Window.Objects.Maximize, Tween_Info, {Position = UDim2.new(0.5, 0, 490/513.318, 0)}):Play()
+			TweenService:Create(Window.Objects.Maximize, Tween_Info, {Position = UDim2.new(0.5, 0, 515/513.318, 0)}):Play()
 			TweenService:Create(Window.Objects.Maximize, Tween_Info, {BackgroundTransparency = 1}):Play()
 		end)
 		-- Receiver
@@ -905,7 +1007,7 @@ function Library.Init(self, Data)
 			local Tab = {}
 			Tab.__index = Tab
 			--/Window/Tab/
-			
+
 			Tab.Table = setmetatable({
 				Data = Data;
 				Parent = self;
@@ -923,6 +1025,8 @@ function Library.Init(self, Data)
 				end;
 			}, Tab)
 
+			Data.self = Tab.Table
+
 			Tab.Objects = {}
 
 			Tab.Objects.Folder = Utility:Create({
@@ -930,12 +1034,12 @@ function Library.Init(self, Data)
 			})
 
 			Tab.Objects.Pager = Utility:Create({
-				{1, "TextButton", {Name = "Pager_" .. Data.Name, AutoButtonColor = false, Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXX, Size = UDim2.new(158/158, 0, 25/158, 0), AnchorPoint = Vector2.new(0, 0), Position = UDim2.new(0, 0, 0, 0), BackgroundColor3 = Library.Theme.Primary[3].Color, BackgroundTransparency = 0, Text = "", Parent = Window.Objects.Box}};
+				{1, "TextButton", {Name = "Pager_" .. Data.Name, AutoButtonColor = false, Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXX, Size = UDim2.new(158/158, 0, 25/158, 0), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0, 0, 0, 0), BackgroundColor3 = Library.Theme.Primary[3].Color, BackgroundTransparency = 0, Text = "", Parent = Window.Objects.Box}};
 				{2, "ImageButton", {Name = "Box", AutoButtonColor = false, Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeYY, Size = UDim2.new(1, 0, 1, 0), AnchorPoint = Vector2.new(0, 0), Position = UDim2.new(0, 0, 0, 0), BackgroundColor3 = Library.Theme.Primary[6].Color, BackgroundTransparency = 0, Image = Data.Asset or "", Parent = {1}}};
 				{3, "Frame", {Name = "Icon", Active = false, Rotation = 0, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(15/25, 0, 15/25, 0), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0.5, 0, 0.5, 0), BackgroundColor3 = Library.Theme.Primary[6].Color, BackgroundTransparency = 0, Parent = {2}}};
 				{4, "ImageLabel", {Name = "Glow", Visible = false, Active = false, Rotation = -45, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(3, 0, 3, 0), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0.5, 0, 0.5, 0), BackgroundColor3 = Library.Theme.Primary[7].Color, BackgroundTransparency = 1, Image = "rbxassetid://15578039991", ImageTransparency = 0.75, Parent = {3}}};
 			})
-			
+
 			Utility:Create({
 				{1, "UIGradient", {Name = "Pager_Gradient", Rotation = -45, Offset = Vector2.new(25/158 * 1.5, 0), Transparency = NumberSequence.new({NumberSequenceKeypoint.new(0, 0), NumberSequenceKeypoint.new(1 - 25/158 - 0.01, 0), NumberSequenceKeypoint.new(1 - 25/158, 1), NumberSequenceKeypoint.new(1, 1)}), Parent = Tab.Objects.Pager}};
 				{2, "UIGradient", {Name = "Box_Gradient", Rotation = math.deg(math.atan2((Tab.Objects.Pager.Box.AbsolutePosition - (Tab.Objects.Pager.Box.AbsolutePosition + Tab.Objects.Pager.Box.AbsoluteSize/2)).Y, (Tab.Objects.Pager.Box.AbsolutePosition - (Tab.Objects.Pager.Box.AbsolutePosition + Tab.Objects.Pager.Box.AbsoluteSize/2)).X)) + 90, Color = ColorSequence.new({ColorSequenceKeypoint.new(0, Library.Theme.Secondary[4].Gradient), ColorSequenceKeypoint.new(0.5, Library.Theme.Secondary[4].Gradient), ColorSequenceKeypoint.new(0.501, Library.Theme.Secondary[4].Color), ColorSequenceKeypoint.new(1, Library.Theme.Secondary[4].Color)}), Parent = Tab.Objects.Pager.Box}};
@@ -945,21 +1049,21 @@ function Library.Init(self, Data)
 				{1, "Frame", {Name = "TitleContainer", Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(128/158, 0, 22/25, 0), AnchorPoint = Vector2.new(1, 0.5), Position = UDim2.new(1, 0, 0.5, 0), BackgroundColor3 = Library.Theme.Secondary[3].Color, BackgroundTransparency = 1, Parent = Tab.Objects.Pager}};
 				{2, "TextLabel", {Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(1, 0, 1, 0), AnchorPoint = Vector2.new(0, 0), Position = UDim2.new(0, 0, 0, 0), BackgroundColor3 = Library.Theme.Primary[7].Color, BackgroundTransparency = 1, Font = 36, TextScaled = true, TextWrapped = true, TextXAlignment = 0, Text = tostring(Data.Name), TextSize = 18, TextColor3 = Library.Theme.Primary[6].Color, Parent = {1}}};
 			})
-			
-			Utility:Hover(Tab.Objects.Pager)
-			
+
+			Utility:Hover(Tab.Objects.Pager, {X = 158/158, Y = 25/158})
+
 			Tab.Objects.Frame = Utility:Create({
 				{1, "Frame", {Name = "Tab_" .. Data.Name, Visible = false, Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(44/609, 0, 437/437, 0), AnchorPoint = Vector2.new(0, 0), Position = UDim2.new(564/609, 0, 0, 0), BackgroundColor3 = Library.Theme.Primary[6].Color, BackgroundTransparency = 0, Parent = Tab.Objects.Folder}};
 			})
-
+			
 			Tab.Objects.Container = Utility:Create({
 				{1, "Frame", {Name = "Container", Visible = false, Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(44/44, 0, 437/437, 0), AnchorPoint = Vector2.new(0, 0), Position = UDim2.new(0, 0, 0, 0), BackgroundColor3 = Library.Theme.Primary[7].Color, BackgroundTransparency = 1, Parent = Tab.Objects.Frame}};
 			})
-
+			
 			Utility:Create({
 				{1, "UIGradient", {Rotation = math.deg(math.atan2(Tab.Objects.Frame.AbsolutePosition.Y - (Tab.Objects.Frame.AbsolutePosition.Y + Window.Objects.Window.AbsoluteSize.Y*(381/381)/2), Tab.Objects.Frame.AbsolutePosition.X - (Tab.Objects.Frame.AbsolutePosition.X + Window.Objects.Window.AbsoluteSize.X*(429/609)/2))) + 90, Color = ColorSequence.new({ColorSequenceKeypoint.new(0, Library.Theme.Secondary[5].Gradient), ColorSequenceKeypoint.new(0.5, Library.Theme.Secondary[5].Gradient), ColorSequenceKeypoint.new(0.501, Library.Theme.Secondary[5].Color), ColorSequenceKeypoint.new(1, Library.Theme.Secondary[5].Color)}), Parent = Tab.Objects.Frame}};
 			})
-
+			
 			Tab.Objects.SearchBar = Utility:Create({
 				{1, "Frame", {Name = "SearchBar", Visible = false, Active = true, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(377/429, 0, 30/381, 0), AnchorPoint = Vector2.new(0, 0), Position = UDim2.new(8/429, 0, 8/381, 0), BackgroundColor3 = Library.Theme.Secondary[3].Color, BackgroundTransparency = 0, Parent = Tab.Objects.Frame}};
 				{2, "UICorner", {CornerRadius = UDim.new(0.2, 0), Parent = {1}}};
@@ -967,7 +1071,7 @@ function Library.Init(self, Data)
 
 			Tab.Objects.Navigation = Utility:Create({
 				{1, "Frame", {Name = "Navigation", Visible = false, Active = true, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(225/609, 0, 50/381, 0), AnchorPoint = Vector2.new(0, 0), Position = UDim2.new(383/609, 0, 387/381, 0), BackgroundColor3 = Library.Theme.Primary[6].Color, BackgroundTransparency = 0, Parent = Tab.Objects.Folder}};
-				{2, "Frame", {Name = "Sections", Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(221/225, 0 , 50/50, 0), AnchorPoint = Vector2.new(0, 0), Position = UDim2.new(0, 0, 0, 0), BackgroundColor3 = Color3.fromRGB(23, 24, 26), BackgroundTransparency = 1, Parent = {1}}};
+				{2, "Frame", {Name = "Sections", Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(221/225, 0 , 50/50, 0), AnchorPoint = Vector2.new(0, 0), Position = UDim2.new(0, 0, 0, 0), BackgroundColor3 = Library.Theme.Secondary[6].Color, BackgroundTransparency = 1, Parent = {1}}};
 				{3, "UIListLayout", {Padding = UDim.new(0, 0), VerticalAlignment = Enum.VerticalAlignment.Center, FillDirection = Enum.FillDirection.Horizontal, SortOrder = 2, Parent = {2}}};
 				{4, "UIPadding", {PaddingLeft = UDim.new(0, 9), Parent = {2}}};
 				--{5, "UICorner", {CornerRadius = UDim.new(0.2, 0), Parent = {1}}};
@@ -1060,14 +1164,14 @@ function Library.Init(self, Data)
 
 					TweenService:Create(Window.Objects.Widget, Tween_Info, {Position = UDim2.new(571/609, 0, 0.5, 0)}):Play()
 					TweenService:Create(Tab.Objects.Navigation, Tween_Info, {Size = UDim2.new(609/609, 0, 50/381, 0)}):Play()
-					TweenService:Create(Window.Objects.Minimize, Tween_Info, {Position = UDim2.new(553/609, 0, 387/381, 0)}):Play()
+					TweenService:Create(Window.Objects.Minimize, Tween_Info, {Position = UDim2.new(578/609, 0, 412/381, 0)}):Play()
 
 					Tab.Objects.Navigation.Sections.Visible = true
 				end); Body:Play()
 
 				TweenService:Create(Tab.Objects.Frame, Tween_Info, {Position = UDim2.new(181/609, 0, 0, 0)}):Play()
 				TweenService:Create(Window.Objects.Widget, Tween_Info, {Position = UDim2.new(189/609, 0, 0.5, 0)}):Play()
-				TweenService:Create(Window.Objects.Minimize, Tween_Info, {Position = UDim2.new(169/609, 0, 387/381, 0)}):Play()
+				TweenService:Create(Window.Objects.Minimize, Tween_Info, {Position = UDim2.new(194/609, 0, 412/381, 0)}):Play()
 				TweenService:Create(Tab.Objects.Navigation, Tween_Info, {Position = UDim2.new(0, 0, 387/381, 0)}):Play()
 			end
 
@@ -1081,7 +1185,7 @@ function Library.Init(self, Data)
 
 				TweenService:Create(Tab.Objects.Frame, Tween_Info, {Position = UDim2.new(181/609, 0, 0, 0)}):Play()
 				TweenService:Create(Tab.Objects.Navigation, Tween_Info, {Position = UDim2.new(0, 0, 387/381, 0)}):Play()
-				TweenService:Create(Window.Objects.Minimize, Tween_Info, {Position = UDim2.new(169/609, 0, 387/381, 0)}):Play()
+				TweenService:Create(Window.Objects.Minimize, Tween_Info, {Position = UDim2.new(194/609, 0, 412/381, 0)}):Play()
 
 				Body = TweenService:Create(Window.Objects.Widget, Tween_Info, {Position = UDim2.new(189/609, 0, 0.5, 0)})
 
@@ -1097,7 +1201,7 @@ function Library.Init(self, Data)
 					TweenService:Create(Tab.Objects.Frame, Tween_Info, {Position = UDim2.new(564/609, 0, 0, 0)}):Play()
 					TweenService:Create(Window.Objects.Frame, Tween_Info, {Position = UDim2.new(383/609, 0, 0, 0)}):Play()
 					TweenService:Create(Window.Objects.Widget, Tween_Info, {Position = UDim2.new(571/609, 0, 0.5, 0)}):Play()
-					TweenService:Create(Window.Objects.Minimize, Tween_Info, {Position = UDim2.new(553/609, 0, 387/381, 0)}):Play()
+					TweenService:Create(Window.Objects.Minimize, Tween_Info, {Position = UDim2.new(578/609, 0, 412/381, 0)}):Play()
 					TweenService:Create(Tab.Objects.Navigation, Tween_Info, {Position = UDim2.new(383/609, 0, 387/381, 0)}):Play()
 
 					Tab.Extended = false
@@ -1147,6 +1251,8 @@ function Library.Init(self, Data)
 						end
 					end;
 				}, Interface)
+
+				Data.self = Interface.Table
 
 				Interface.Objects = {}
 
@@ -1289,6 +1395,8 @@ function Library.Init(self, Data)
 					end;
 				}, Section)
 
+				Data.self = Section.Table
+
 				Section.Objects = {}
 
 				Section.Objects.Button = Utility:Create({
@@ -1297,12 +1405,12 @@ function Library.Init(self, Data)
 					--{3, "UICorner", {CornerRadius = UDim.new(0.179, 0), Parent = {2}}};
 					--{4, "UIStroke", {Color = Library.Theme.Primary[6].Color, Thickness = 0.5, Transparency = 0, Parent = {2}}};
 				})
-				
+
 				Utility:Create({
 					{1, "TextLabel", {Active = false, SizeConstraint = Enum.SizeConstraint.RelativeXY, BackgroundTransparency = 1, Size = UDim2.new(0.9, 0, 0.25, 0), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0.5, 0, 0.725, 0), Text = Data.Name, TextScaled = true, TextSize = Section.Objects.Button.AbsoluteSize.Y/10, TextColor3 = Library.Theme.Primary[1].Color, Parent = Section.Objects.Button}};
 					--{6, "UIStroke", {Color = Color3.fromRGB(173, 254, 151), Thickness = 0.5, Transparency = 0.75, Parent = {5}}}
 				})
-				
+
 				local function OnClick()
 					for _, Section in pairs(self.Sections) do
 						Section.Objects.Box.Visible = false
@@ -1310,9 +1418,9 @@ function Library.Init(self, Data)
 
 					Section.Objects.Box.Visible = true
 				end
-				
-				Utility:Hover(Section.Objects.Button)
-				
+
+				Utility:Hover(Section.Objects.Button, {X = 40/50, Y = 50/50})
+
 				Utility:OnClick(Section.Objects.Button, OnClick)
 
 				Utility:OnClick(Section.Objects.Button.ImageButton, OnClick)
@@ -1350,6 +1458,8 @@ function Library.Init(self, Data)
 						end;
 					}, Interface)
 
+					Data.self = Interface.Table
+
 					Interface.Objects = {}
 
 
@@ -1376,6 +1486,8 @@ function Library.Init(self, Data)
 							end
 						end;
 					}, Interface)
+
+					Data.self = Interface.Table
 
 					Interface.Objects = {}
 
@@ -1406,6 +1518,8 @@ function Library.Init(self, Data)
 						Parent = self;
 					}, Interface)
 
+					Data.self = Interface.Table
+
 					table.insert(self.Labels, Interface)
 					table.insert(self.Interfaces, Interface)
 					return Interface.Table
@@ -1420,6 +1534,8 @@ function Library.Init(self, Data)
 						Parent = self;
 					}, Interface)
 
+					Data.self = Interface.Table
+
 					table.insert(self.Interfaces, Interface)
 					return Interface.Table
 				end
@@ -1431,6 +1547,13 @@ function Library.Init(self, Data)
 					Interface.Table = setmetatable({
 						Data = Data;
 						Parent = self;
+						Call = function(self)
+							if Data.Function then
+								Data.Function()
+							else
+								error("Section.CreateButton > Missing Data.Function")
+							end
+						end;
 						Destroy = function(self)
 							for _, obj in pairs(self.Objects) do
 								obj:Destroy()
@@ -1438,17 +1561,19 @@ function Library.Init(self, Data)
 						end;
 					}, Interface)
 
+					Data.self = Interface.Table
+
 					Interface.Objects.Template.Body.Size = UDim2.new(346/369, 0, 189/369, 0)
 
 					Interface.Objects.Receiver = (Library.Create:Pager(Interface.Objects.Template, Data, {XX = 369, X = 302, Y = 63})).Objects.Pager
-					
+
 					Interface.Objects.Receiver.TitleContainer.TextLabel.Text = ""
 
 					Interface.Objects.Receiver.AnchorPoint = Vector2.new(0.5, 0)
 					Interface.Objects.Receiver.Position = UDim2.new(0.5, 0, 283/369, 0)
-					
-					Utility:Hover(Interface.Objects.Receiver)
-					
+
+					Utility:Hover(Interface.Objects.Receiver, {X = 302/369, Y = 63/369})
+
 							--[[Utility:Create({
 								{1, "ImageButton", {Name = "Button_" .. Data.Name, Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXX, Size = UDim2.new(96/117, 0, 20/117, 0), AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.new(0.5, 0, 90/117, 0), BackgroundColor3 = Library.Theme.Primary[2].Color, BackgroundTransparency = 0, Parent = Interface.Objects.Template}};
 								{2, "UICorner", {CornerRadius = UDim.new(0.2, 0), Parent = {1}}};
@@ -1499,6 +1624,8 @@ function Library.Init(self, Data)
 							end
 						end;
 					}, Interface)
+
+					Data.self = Interface.Table
 
 					Interface.Objects.Template.Body.Size = UDim2.new(110/117, 0, 60/117, 0)
 
@@ -1567,6 +1694,8 @@ function Library.Init(self, Data)
 						end;
 					}, Interface)
 
+					Data.self = Interface.Table
+
 					Interface.Objects.Template.Body.Size = UDim2.new(110/117, 0, 60/117, 0)
 
 					Interface.Objects.Receiver = Utility:Create({
@@ -1578,6 +1707,11 @@ function Library.Init(self, Data)
 						{1, "Frame", {Name = "Box", Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeYY, Size = UDim2.new(20/20, 0, 20/20, 0), AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.new(0, 0, 0.5, 0), BackgroundColor3 = Library.Theme.Primary[2].Color, BackgroundTransparency = 0, Parent = Interface.Objects.Receiver}};
 						{2, "UICorner", {CornerRadius = UDim.new(0.2, 0), Parent = {1}}};
 						{3, "TextLabel", {Name = "Pointer", Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeYY, Size = UDim2.new(20/20, 0, 20/20, 0), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0.5, 0, 0.25, 0), BackgroundColor3 = Library.Theme.Primary[6].Color, BackgroundTransparency = 1, Rotation = 180, Text = "^", TextSize = 16, TextColor3 = Library.Theme.Primary[6].Color, Parent = {1}}};
+					})
+
+					Interface.Objects.TextLabel = Utility:Create({
+						{1, "Frame", {Name = "TitleContainer", Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(73/96, 0, 17/20, 0), AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.new(23/96, 0, 0.5, 0), BackgroundColor3 = Library.Theme.Secondary[3].Color, BackgroundTransparency = 1, Parent = Interface.Objects.Receiver}};
+						{2, "TextLabel", {Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(1, 0, 0.75, 0), AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.new(0, 0, 0.5, 0), BackgroundColor3 = Library.Theme.Primary[7].Color, BackgroundTransparency = 1, Font = 36, TextScaled = true, TextWrapped = true, TextXAlignment = 0, Text = type(Data.Text) == "string" and Data.Text or type(Data.Text) == "table" and table.concat(Data.Text, ", ") or "", TextSize = 18, TextColor3 = Library.Theme.Primary[6].Color, Parent = {1}}};
 					})
 
 					Data.IsClosing = false
@@ -1607,6 +1741,8 @@ function Library.Init(self, Data)
 									end)
 
 									if Data.Selected then
+										Data.Text = type(Data.Selected) == "table" and table.concat(Data.Selected, ", ") or ""
+										Interface.Objects.TextLabel.TextLabel.Text = Data.Text
 										Data.Function(Data, Data.Selected, false)
 									end
 								end
@@ -1668,12 +1804,11 @@ function Library.Init(self, Data)
 										Interface.Objects.List.CanvasPosition = CanvasPosition
 									end)
 
-
 									for Index, Option in pairs(Data.Table) do
 										local Option_Interface = Library.Create:Pager(Interface.Objects.List, Data, {XX = 96, X = 96, Y = 20})
-										
-										Utility:Hover(Option_Interface.Objects.Pager)
-										
+
+										Utility:Hover(Option_Interface.Objects.Pager, {X = 96/96, Y = 20/96})
+
 										Option_Interface.Objects.TextLabel.Text = tostring(Option)
 
 										Signals[#Signals + 1] = Option_Interface.Objects.Pager.MouseButton1Click:Connect(function()
@@ -1696,6 +1831,9 @@ function Library.Init(self, Data)
 															Data.State = not Data.State
 														end)
 
+														Data.Text = type(Option) == "string" and Option or type(Option) == "function" and tostring(Index)
+														Interface.Objects.TextLabel.TextLabel.Text = Data.Text
+
 														if typeof(Option) == "string" then
 															Data.Function(Data, Option)
 														elseif typeof(Option) == "function" then
@@ -1706,6 +1844,9 @@ function Library.Init(self, Data)
 															table.insert(Data.Selected, Option)
 														end
 
+														Data.Text = type(Data.Selected) == "table" and table.concat(Data.Selected, ", ") or ""
+														Interface.Objects.TextLabel.TextLabel.Text = Data.Text
+
 														Data.Function(Data, Data.Selected, true)
 													end
 												elseif Option_Interface.Selected and type(Data.Selected) == "table" then
@@ -1713,6 +1854,9 @@ function Library.Init(self, Data)
 
 													if Data.Selected and type(Data.Selected) == "table" then
 														table.remove(Data.Selected, table.find(Data.Selected, Option))
+
+														Data.Text = type(Data.Selected) == "table" and table.concat(Data.Selected, ", ") or ""
+														Interface.Objects.TextLabel.TextLabel.Text = Data.Text
 
 														Data.Function(Data, Data.Selected, true)
 													else
@@ -1724,6 +1868,8 @@ function Library.Init(self, Data)
 
 										if Data.Selected and table.find(Data.Selected, Option) and type(Data.Selected) == "table" then
 											Option_Interface:select()
+
+											Interface.Objects.TextLabel.TextLabel.Text = type(Data.Selected) == "table" and table.concat(Data.Selected, ", ") or ""
 
 											Data.Function(Data, Data.Selected, false)
 										end
@@ -1741,7 +1887,10 @@ function Library.Init(self, Data)
 						end
 					end
 
-					if Data.Init then Callback() end
+					if Data.Init and Data.Text then
+						Data.Function(Data, Data.Selected and (type(Data.Text) == "string" and string.split(Data.Text, ", ") or type(Data.Text) == "table" and Data.Text) or type(Data.Text) == "table" and table.concat(Data.Text, ", ") or Data.Text or "", false)
+						Callback()
+					end
 
 					Interface.Objects.Receiver.MouseButton1Click:Connect(Callback)
 
@@ -1763,7 +1912,7 @@ function Library.Init(self, Data)
 							if Index == "Value" then
 								Data.Value = Value
 								Interface.Objects.Bar.Pointer.Visual.Value.Text = Value
-								Interface.Objects.Bar.Pointer.Position = UDim2.new(Value / Data.Max, 0, 0.5, 0)
+								Interface.Objects.Bar.Pointer.Position = UDim2.new(math.clamp((Value - Data.Min) / (Data.Max - Data.Min), 0, 1), 0, 0.5, 0)
 							else
 								Data[Index] = Value
 							end
@@ -1777,6 +1926,8 @@ function Library.Init(self, Data)
 							end
 						end;
 					}, Interface)
+
+					Data.self = Interface.Table
 
 					Interface.Objects.Template.Body.Size = UDim2.new(110/117, 0, 60/117, 0)
 
@@ -1803,7 +1954,7 @@ function Library.Init(self, Data)
 					Data.Max = Data.Range and Data.Range[2] or Data.Max
 
 					Interface.Objects.Bar.Pointer.Visual.Value.Text = Data.Value
-					Interface.Objects.Bar.Pointer.Position = UDim2.new(Data.Value / Data.Max, 0, 0.5, 0)
+					Interface.Objects.Bar.Pointer.Position = UDim2.new((Data.Value - Data.Min) / (Data.Max - Data.Min), 0, 0.5, 0)
 
 					local Signals = {}
 					local function Callback()
@@ -1850,20 +2001,20 @@ function Library.Init(self, Data)
 									--{4, "UICorner", {CornerRadius = UDim.new(0.2, 0), Parent = {3}}};
 								})
 
-								Prompt.Objects.Bar.Pointer.Position = UDim2.new(Data.Value / Data.Max, 0, 0.5, 0)
+								Prompt.Objects.Bar.Pointer.Position = UDim2.new((Data.Value - Data.Min) / (Data.Max - Data.Min), 0, 0.5, 0)
 
 								local Slide, InputBegan = false, nil
 								local function Callback(Input)
 									if InputBegan and Prompt.Objects.Visual and Prompt.Objects.Visual:FindFirstChild("Value") then
-										local Position = math.clamp(InputBegan.Position.X - Prompt.Objects.Bar.AbsolutePosition.X, 0, Prompt.Objects.Bar.AbsoluteSize.X)
+										local Position = math.clamp(InputBegan.Position.X - Prompt.Objects.Bar.AbsolutePosition.X, Data.Min, Prompt.Objects.Bar.AbsoluteSize.X)
 										Position = Position / Prompt.Objects.Bar.AbsoluteSize.X
 
-										local Value = math.clamp(Position * Data.Max, Data.Min, Data.Max)
+										local Value = math.clamp(Position * (Data.Max - Data.Min) + Data.Min, Data.Min, Data.Max)
 										Value = Data.Increment and math.floor(Value / Data.Increment + 0.5) * (Data.Increment * 10000000) / 10000000 or Value
 										Data.Value = Value
 
 										Prompt.Objects.Visual.Value.Text = tostring(Value)
-										Prompt.Objects.Bar.Pointer.Position = UDim2.new(Position, 0, 0.5, 0)
+										Prompt.Objects.Bar.Pointer.Position = UDim2.new(math.clamp((Value - Data.Min) / (Data.Max - Data.Min), 0, 1), 0, 0.5, 0)
 
 										Data.Function(Data, Value, Input)
 									end
@@ -1875,7 +2026,6 @@ function Library.Init(self, Data)
 										Received = true
 										Input.Changed:Connect(function()
 											if not Utility:InputBegan(Input) then
-												warn("Received = false")
 												Received = false
 											end
 										end)
@@ -1912,7 +2062,7 @@ function Library.Init(self, Data)
 											Prompt.Objects.Blur:Destroy()
 
 											Interface.Objects.Bar.Pointer.Visual.Value.Text = Data.Value
-											Interface.Objects.Bar.Pointer.Position = UDim2.new(Data.Value / Data.Max, 0, 0.5, 0)
+											Interface.Objects.Bar.Pointer.Position = UDim2.new((Data.Value - Data.Min) / (Data.Max - Data.Min), 0, 0.5, 0)
 
 											Prompt.Objects.Prompt:Destroy()
 
@@ -1983,6 +2133,8 @@ function Library.Init(self, Data)
 						end;
 					}, Interface)
 
+					Data.self = Interface.Table
+
 					Interface.Objects.Template.Body.Size = UDim2.new(110/117, 0, 60/117, 0)
 
 					Interface.Objects.Receiver = Utility:Create({
@@ -2023,7 +2175,7 @@ function Library.Init(self, Data)
 								})
 
 								Prompt.Objects.Receiver = Utility:Create({
-									{1, "TextBox", {Name = "Input_" .. Data.Name, Active = true, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXX, Size = UDim2.new(609/609, 0, 50/609, 0), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0.5, 0, 0.5, 0), BackgroundColor3 = Library.Theme.Secondary[5].Color, BackgroundTransparency = 1, ClearTextOnFocus = false, TextColor3 = Library.Theme.Primary[6].Color, Text = Data.ClearTextOnFocus and "" or Data.Text, Parent = Prompt.Objects.Frame}};
+									{1, "TextBox", {Name = "Input_" .. Data.Name, Active = true, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXX, Size = UDim2.new(609/609, 0, 50/609, 0), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0.5, 0, 0.5, 0), BackgroundColor3 = Library.Theme.Secondary[5].Color, BackgroundTransparency = 1, ClearTextOnFocus = false, TextColor3 = Library.Theme.Primary[6].Color, Text = Data.ClearTextOnFocus and "" or Data.Text, PlaceholderText = Data.PlaceholderText or "", Parent = Prompt.Objects.Frame}};
 									--{2, "UICorner", {CornerRadius = UDim.new(0.2, 0), Parent = {1}}};
 								})
 
@@ -2074,7 +2226,7 @@ function Library.Init(self, Data)
 								Prompt:Destroy()
 							end
 						else
-							error("Section.CreateSlider > Missing Data.Function")
+							error("Section.CreateInput > Missing Data.Function")
 						end
 					end
 
@@ -2095,6 +2247,8 @@ function Library.Init(self, Data)
 						Parent = self;
 					}, Interface)
 
+					Data.self = Interface.Table
+
 					table.insert(self.Interfaces, Interface)
 					return Interface.Table
 				end
@@ -2107,6 +2261,8 @@ function Library.Init(self, Data)
 						Data = Data;
 						Parent = self;
 					}, Interface)
+
+					Data.self = Interface.Table
 
 					table.insert(self.Interfaces, Interface)
 					return Interface.Table
@@ -2141,69 +2297,72 @@ end
 --[[
 local Core = Library:Init({
 	Name = "Infinixity";
+	Parent = LocalPlayer.PlayerGui;
 	Theme = {
-        Primary = { -- 7
-            {
-                Color = Color3.fromRGB(255, 255, 255);
-                Gradient = Color3.fromRGB(254, 254, 254);
-            };
-            {
-                Color = Color3.fromRGB(60, 60, 60);
-                Gradient = Color3.fromRGB(62, 62, 62);
-            };
-            { -- Inputs
-                Color = Color3.fromRGB(50, 50, 50);
-                Gradient = Color3.fromRGB(50, 50, 50);
-            };
-            {
-                Color = Color3.fromRGB(150, 150, 150);
-                Gradient = Color3.fromRGB(254, 254, 254);
-            };
-            {
-                Color = Color3.fromRGB(255, 255, 255);
-                Gradient = Color3.fromRGB(210, 210, 210);
-            };
-            {
-                Color = Color3.fromRGB(255, 255, 255);
-                Gradient = Color3.fromRGB(255, 255, 255);
-            };
-            {
-                Color = Color3.fromRGB(0, 0, 0);
-                Gradient = Color3.fromRGB(0, 0, 0);
-            };
-        };
-        Secondary = { -- 6
-            { 
-                Color = Color3.fromRGB(15, 15, 15);
-                Gradient = Color3.fromRGB(40, 40, 40);
-            };
-            { -- Window.Objects.Box
-                Color = Color3.fromRGB(40, 40, 40);
-                Gradient = Color3.fromRGB(40, 40, 40);
-            };
-            { -- Containers
-                Color = Color3.fromRGB(30, 30, 30);
-                Gradient = Color3.fromRGB(40, 40, 40);
-            };
-            {
-                Color = Color3.fromRGB(30, 30, 30);
-                Gradient = Color3.fromRGB(40, 40, 40);
-            };
-            {
-                Color = Color3.fromRGB(10, 10, 10);
-                Gradient = Color3.fromRGB(10, 10, 10);
-            };
-            {
-                Color = Color3.fromRGB(20, 20, 20);
-                Gradient = Color3.fromRGB(20, 20, 20);
-            };
-        };
-    }
+		Primary = { -- 7
+			{
+				Color = Color3.fromRGB(255, 255, 255);
+				Gradient = Color3.fromRGB(254, 254, 254);
+			};
+			{
+				Color = Color3.fromRGB(60, 60, 60);
+				Gradient = Color3.fromRGB(62, 62, 62);
+			};
+			{ -- Inputs
+				Color = Color3.fromRGB(50, 50, 50);
+				Gradient = Color3.fromRGB(50, 50, 50);
+			};
+			{
+				Color = Color3.fromRGB(150, 150, 150);
+				Gradient = Color3.fromRGB(254, 254, 254);
+			};
+			{
+				Color = Color3.fromRGB(255, 255, 255);
+				Gradient = Color3.fromRGB(210, 210, 210);
+			};
+			{
+				Color = Color3.fromRGB(255, 255, 255);
+				Gradient = Color3.fromRGB(255, 255, 255);
+			};
+			{
+				Color = Color3.fromRGB(0, 0, 0);
+				Gradient = Color3.fromRGB(0, 0, 0);
+			};
+		};
+		Secondary = { -- 6
+			{ 
+				Color = Color3.fromRGB(15, 15, 15);
+				Gradient = Color3.fromRGB(40, 40, 40);
+			};
+			{ -- Window.Objects.Box
+				Color = Color3.fromRGB(40, 40, 40);
+				Gradient = Color3.fromRGB(40, 40, 40);
+			};
+			{ -- Containers
+				Color = Color3.fromRGB(30, 30, 30);
+				Gradient = Color3.fromRGB(40, 40, 40);
+			};
+			{
+				Color = Color3.fromRGB(30, 30, 30);
+				Gradient = Color3.fromRGB(40, 40, 40);
+			};
+			{
+				Color = Color3.fromRGB(10, 10, 10);
+				Gradient = Color3.fromRGB(10, 10, 10);
+			};
+			{
+				Color = Color3.fromRGB(20, 20, 20);
+				Gradient = Color3.fromRGB(20, 20, 20);
+			};
+		};
+	}
 })
 
 Core:Validate({
 	Name = "Infinixity";
+	Tutorial = true;
 	Validate = "abc";
+	Text = "Key here!";
 	Buttons = {
 		{
 			Name = "PandaDev";
@@ -2262,11 +2421,11 @@ for i = 1, 40 do
 		Section = Tab:CreateSection({
 			Name = ("Section %d"):format(i);
 		})
-		Section:CreateSpacing()
+		Section:CreateSpacing({})
 		Section:CreateLabel({
 			Name = "Label";
 		})
-		Section:CreateParagraph()
+		Section:CreateParagraph({})
 		Section:CreateButton({
 			Name = "Button";
 			Body = string.rep("Body", 5);
