@@ -1549,7 +1549,7 @@ function Library.Init(self, Data)
 						Parent = self;
 						Call = function(self, ...)
 							if Data.Function then
-								Data.Function(...)
+								Data.Function(Data, ...)
 							else
 								error("Section.CreateButton > Missing Data.Function")
 							end
@@ -1581,7 +1581,7 @@ function Library.Init(self, Data)
 
 					local function Callback()
 						if Data.Function then
-							Data.Function()
+							Data.Function(Data)
 						else
 							error("Section.CreateButton > Missing Data.Function")
 						end
