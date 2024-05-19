@@ -1547,9 +1547,9 @@ function Library.Init(self, Data)
 					Interface.Table = setmetatable({
 						Data = Data;
 						Parent = self;
-						Call = function(self)
+						Call = function(self, ...)
 							if Data.Function then
-								Data.Function()
+								Data.Function(...)
 							else
 								error("Section.CreateButton > Missing Data.Function")
 							end
