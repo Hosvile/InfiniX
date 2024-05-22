@@ -559,7 +559,7 @@ function Library.Init(self, Data)
 
 		Core.Objects.Notifications.CanvasPosition = Vector2.new(0, math.huge)
 
-		game:GetService("Debris"):AddItem(Notification.Objects.Frame, Data.Duration or 60Data.Duration or 60)
+		game:GetService("Debris"):AddItem(Notification.Objects.Frame, Data.Duration or 60)
 		
 		return Notification.Table
 	end
