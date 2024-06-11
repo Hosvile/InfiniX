@@ -5027,22 +5027,4 @@ end
 
 
 
-if not VSCode then
-	game:GetService("StarterGui"):SetCore("DevConsoleVisible",true)
-
-	if false then
-		print(disassemble(game.Players.LocalPlayer.Character.Animate))
-	else
-		print(disassemble(game:GetService("Players").LocalPlayer.PlayerScripts.TestScript))
-	end
-else
-	local result = disassemble(_Bytecode)
-	
-	local file = io.open("DeLuau.lua","w")
-
-	file:write(result)
-end
-
-
-
 return disassemble
