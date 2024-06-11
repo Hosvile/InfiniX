@@ -2396,15 +2396,13 @@ local function disassemble(scr, settings)
 		
 		function TableAssign:Write()
 			local register = Register:Get(self._var)
+			
+			Object:Decrement(register)
 
-			if register then
-				Object:Decrement(register)
-
-				if self._val then
-					return ("%s[%s] = %s"):format(register._output, tostring(self._key), tostring(self._val))
-				else
-					return ("%s[%s]"):format(register._output, tostring(self._key))
-				end
+			if self._val then
+				return ("%s[%s] = %s"):format(register._output, tostring(self._key), tostring(self._val))
+			else
+				return ("%s[%s]"):format(register._output, tostring(self._key))
 			end
 		end
 
@@ -3853,7 +3851,7 @@ local function disassemble(scr, settings)
 							end
 						end
 					elseif OpCode == enum.OpCode.GETTABLEN then
-						local statement = Declaration:new(Instruction:A(), TableAssign:new(Register:Get(Instruction:B(), Block)._output, Instruction:C() + 1, nil, Block)._output, Block)
+						local statement = Declaration:new(Instruction:A(), TableAssign:new(Instruction:B(), Instruction:C() + 1, nil, Block)._output, Block)
 						
 						Block:AddStatement(properties.Name, OpCode, statement, index)
 					elseif OpCode == enum.OpCode.SETTABLEN then
@@ -5025,6 +5023,24 @@ local function disassemble(scr, settings)
 		
 		return Decompile:Output()
 	end
+end
+
+
+
+if not VSCode then
+	game:GetService("StarterGui"):SetCore("DevConsoleVisible",true)
+
+	if false then
+		print(disassemble(game.Players.LocalPlayer.Character.Animate))
+	else
+		print(disassemble(game:GetService("Players").LocalPlayer.PlayerScripts.TestScript))
+	end
+else
+	local result = disassemble(_Bytecode)
+	
+	local file = io.open("DeLuau.lua","w")
+
+	file:write(result)
 end
 
 
