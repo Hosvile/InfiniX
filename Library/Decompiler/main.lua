@@ -10,12 +10,14 @@
 
 
 
-local VSCode = true
+local VSCode = false
 
 
 
-_G.bit32 = bit32 or require("modules/bitwise").bit32
-_G.bit = bit or require("modules/bitwise").bit
+if VSCode then
+	_G.bit32 = bit32 or require("modules/bitwise").bit32
+	_G.bit = bit or require("modules/bitwise").bit
+end
 
 
 
