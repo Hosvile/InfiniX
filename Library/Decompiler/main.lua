@@ -4238,7 +4238,15 @@ local function disassemble(scr, settings)
 									elseif OpCode == enum.OpCode.JUMPXEQKNIL then
 										Right = "nil"
 									else
-										Right = decompile:ConstantToExpression(func.Constants[GetAux():Value()])
+										local constant = func.Constants[GetAux():Value()]
+
+										if not constant then
+											constant = GetAux():Value()
+
+											warn("right constant not found", constant)
+										end
+
+										Right = decompile:ConstantToExpression(constant)
 									end
 								else
 									Right = Object:RedundanceGet(GetAux():Value(), Block)
