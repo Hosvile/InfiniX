@@ -4236,22 +4236,22 @@ local function disassemble(scr, settings)
 
 								if Operation == enum.BinaryOperation.CompareEq and OpCode ~= enum.OpCode.JUMPIFEQ then
 									if OpCode == enum.OpCode.JUMPXEQKN or OpCode == enum.OpCode.JUMPXEQKS then
-										Right = decompile:ConstantToExpression(func.Constants[bit32.band(GetAux():Value(), 255)])
+										Right = decompile:ConstantToExpression(func.Constants[bit32.band(func.Instructions[index + 1]:Value(), 255)])
 									elseif OpCode == enum.OpCode.JUMPXEQKNIL then
 										Right = "nil"
 									else
-										local constant = func.Constants[GetAux():Value()]
+										local constant = func.Constants[func.Instructions[index + 1]:Value()]
 
 										if not constant then
-											constant = GetAux():Value()
+											constant = func.Instructions[index + 1]:Value()
 
 											warn("right constant not found", constant)
 										end
 
-										Right = decompile:ConstantToExpression(constant)
+										Right = type(constant) == "table" and decompile:ConstantToExpression(constant) or constant
 									end
 								else
-									Right = Object:RedundanceGet(GetAux():Value(), Block)
+									Right = Object:RedundanceGet(func.Instructions[index + 1]:Value(), Block)
 								end
 
 								if not (Source and OperationChar and Right) then
