@@ -1875,7 +1875,7 @@ local function disassemble(scr, settings)
 			upvalue = "upval";
 			reference = "ref";
 			
-			OpCodes = false;
+			OpCodes = true;
 
 			KeepRedundance = true;
 			ShowRedundance = true;
@@ -4225,28 +4225,40 @@ local function disassemble(scr, settings)
 							end
 							
 							local Operation = BinaryExpression:GetBinaryOperation(OpCode)
-							Operation = BinaryExpression:BinaryOperationChar(Operation)
+							local OperationChar = BinaryExpression:BinaryOperationChar(Operation)
 							
 							local Condition
 							if auxUsed then
 								local Source = Object:RedundanceGet(Instruction:A(), Block)
-								local AuxObject = Object:RedundanceGet(properties.Aux, Block)
+								local Right = Object:RedundanceGet(properties.Aux, Block)
 
-								if not (Source and Operation and AuxObject) then
-									print("if condition missng", Source, Operation, AuxObject, properties.Aux, debug.traceback())
+								if Operation == enum.BinaryOperation.CompareEq and OpCode ~= enum.OpCode.JUMPIFEQ then
+									if OpCode == enum.OpCode.JUMPXEQKN or OpCode == enum.OpCode.JUMPXEQKS then
+										Right = decompile:ConstantToExpression(func.Constants[bit32.band(GetAux():Value(), 255)])
+									elseif OpCode == enum.OpCode.JUMPXEQKNIL then
+										Right = "nil"
+									else
+										Right = decompile:ConstantToExpression(func.Constants[GetAux():Value()])
+									end
+								else
+									Right = Object:RedundanceGet(GetAux():Value(), Block)
+								end
+
+								if not (Source and OperationChar and Right) then
+									print("if condition missng", Source, OperationChar, Right, properties.Aux, debug.traceback())
 								end
 
 								Condition = ("%s %s %s"):format(
 									tostring(Source),
-									tostring(Operation),
-									tostring(AuxObject or properties.Aux)
+									tostring(OperationChar),
+									tostring(Right)
 								)
 							else
 								local obj = Object:RedundanceGet(Instruction:A(), Block)
 
 								Condition = ("%s"):format(obj and not obj:match("[^{][}$]") and obj or Register:Get(Instruction:A(), Block)._output)
 							end
-
+						
 							local iOpCode
 			
 							if condition == enum.Condition.Not then
@@ -4912,17 +4924,19 @@ local function disassemble(scr, settings)
 				elseif (constant:Type() == enum.ConstantType.String) then
 					return '"' .. constant:Value() .. '"'
 				elseif (constant:Type() == enum.ConstantType.Import) then
-					local names = {}
-	
-					for key, value in pairs(constant:Value()) do
-						if not value.Value then
-							print("value.Value missing", debug.traceback())
-						end
+					local import = ""
 
-						table.insert(names, value:Value())
+					local imports = constant:Value()
+
+					for i = 1, #imports do
+						import = import .. "value"
+
+						if i < #constant:Value() then
+							import = import .. "."
+						end
 					end
-	
-					return table.concat(names, ".")
+					
+					return import
 				elseif (constant:Type() == enum.ConstantType.Vector) then
 					local values = {}
 	
