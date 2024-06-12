@@ -3987,54 +3987,22 @@ local function disassemble(scr, settings)
 					elseif OpCode == enum.OpCode.SETLIST then
 						local tbl = TableNew:Get(Instruction:A(), Block)
 			
-						if tbl then
-							local declaration
-							local indexes = {}
+						local declaration
+						local indexes = {}
+						
+						local C = Instruction:C()
+						
+						for i = 1, C - 1 do
+							local statement = TableAssign:new(tbl._variable, i, Object:RedundanceGet(Instruction:B() + i - 1, Block), Block)
 							
-							local C = Instruction:C()
-							
-							if C <= 0 then
-								local statement = TableAssign:new(tbl._variable, GetAux():Value(), Object:RedundanceGet(Instruction:B(), Block), Block)
-								
-								if settings.KeepRedundance then
-									Block:AddStatement(properties.Name, OpCode, statement, index)
-								else
-									tbl:Insert(statement)
-
-									local obj = Declaration:Get(Instruction:A(), Block)
-									
-									obj:Renew(tbl._variable, tbl._output)
-								end
+							if settings.KeepRedundance then
+								Block:AddStatement(properties.Name, OpCode, statement, index)
 							else
-								if C - 1 > 0 then
-									for i = 0, C - 2 do
-										if i >= 0 then
-											local statement = TableAssign:new(tbl._variable, GetAux():Value(), Object:RedundanceGet(Instruction:B(), Block), Block)
-											
-											if settings.KeepRedundance then
-												Block:AddStatement(properties.Name, OpCode, statement, index)
-											else
-												tbl:Insert(statement)
+								tbl:Insert(statement)
 
-												local obj = Declaration:Get(Instruction:A(), Block)
-												
-												obj:Renew(tbl._variable, tbl._output)
-											end
-										end
-									end
-								else
-									local statement = TableAssign:new(tbl._variable, GetAux():Value(), Object:RedundanceGet(Instruction:B(), Block), Block)
-									
-									if settings.KeepRedundance then
-										Block:AddStatement(properties.Name, OpCode, statement, index)
-									else
-										tbl:Insert(statement)
-
-										local obj = Declaration:Get(Instruction:A(), Block)
-										
-										obj:Renew(tbl._variable, tbl._output)
-									end
-								end
+								local obj = Declaration:Get(Instruction:A(), Block)
+								
+								obj:Renew(tbl._variable, tbl._output)
 							end
 						end
 					elseif OpCode == enum.OpCode.ADD
@@ -4526,7 +4494,7 @@ local function disassemble(scr, settings)
 
 						Block:AddStatement(properties.Name, OpCode, statement, index)
 					elseif OpCode == enum.OpCode.SETUPVAL then
-						local statement = Declaration:new(Instruction:A(), ("upvalue[%s]"):format(func.Upvalues[Instruction:B()]), Block)
+						local statement = Plain:new(("upvalue[%s] = %s"):format(func.Upvalues[Instruction:B()], Register:Get(Instruction:A(), Block)._output))
 
 						Block:AddStatement(properties.Name, OpCode, statement, index)
 					elseif OpCode == enum.OpCode.RETURN then
