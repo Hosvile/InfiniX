@@ -1867,7 +1867,7 @@ local function disassemble(scr, settings)
 			upvalue = "upval";
 			reference = "ref";
 			
-			OpCodes = true;
+			OpCodes = false;
 
 			KeepRedundance = true;
 			ShowRedundance = true;
@@ -4493,6 +4493,10 @@ local function disassemble(scr, settings)
 						local statement = Declaration:new(Instruction:A(), ("upvalue[%s]"):format(func.Upvalues[Instruction:B()]), Block)
 
 						Block:AddStatement(properties.Name, OpCode, statement, index)
+					elseif OpCode == enum.OpCode.SETUPVAL then
+						local statement = Declaration:new(Instruction:A(), ("upvalue[%s]"):format(func.Upvalues[Instruction:B()]), Block)
+
+						Block:AddStatement(properties.Name, OpCode, statement, index)
 					elseif OpCode == enum.OpCode.RETURN then
 						local args = {}
 
@@ -5023,6 +5027,18 @@ local function disassemble(scr, settings)
 		
 		return Decompile:Output()
 	end
+end
+
+
+
+if not VSCode then
+	
+else
+	local result = disassemble(_Bytecode)
+	
+	local file = io.open("DeLuau.lua","w")
+
+	file:write(result)
 end
 
 
