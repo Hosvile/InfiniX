@@ -4168,8 +4168,10 @@ local function disassemble(scr, settings)
 									end
 								end
 								
-								body:Exit()
-			
+								if body then
+									body:Exit()
+								end
+
 								--Block:AddStatement(properties.Name, OpCode, statement, index)
 								
 								local Condition
