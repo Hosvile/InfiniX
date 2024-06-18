@@ -25,7 +25,5 @@ local old; old = hookmetamethod(game, "__namecall", function(self, ...)
 		end
 	end
 
-	RS_MT()
-	
 	return old(self, ...)
 end)
