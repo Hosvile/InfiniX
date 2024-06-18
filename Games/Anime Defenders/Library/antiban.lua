@@ -14,7 +14,7 @@ local old; old = hookmetamethod(game, "__namecall", function(self, ...)
 					warn("1 BAN INCOMMING 0 ARGS", debug.traceback())
 
 					return
-				elseif ... == game.GetService(game, "Players").LocalPlayer.UserId then
+				elseif firstArg == game.GetService(game, "Players").LocalPlayer.UserId then
 					game.GetService(game, "StarterGui").SetCore(game.GetService(game, "StarterGui"), "DevConsoleVisible", true)
 
 					warn("1 BAN INCOMMING 0 ARGS USERID", debug.traceback())
