@@ -1802,7 +1802,7 @@ function Library.Init(self, Data)
 										Interface.Objects.List.CanvasPosition = CanvasPosition
 									end)
 
-									for Index, Option in pairs(Data.Table) do
+									for Index, Option in pairs(type(Data.Table) == "function" and Data.Table() or Data.Table) do
 										local Option_Interface = Library.Create:Pager(Interface.Objects.List, Data, {XX = 96, X = 96, Y = 20})
 
 										Utility:Hover(Option_Interface.Objects.Pager, {X = 96/96, Y = 20/96})
