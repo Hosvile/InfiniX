@@ -341,11 +341,15 @@ function Library.Init(self, Data)
 		Windows = {};
 		Destroy = function(self)
 			for _, obj in pairs(self.Windows) do
-				obj:Destroy()
+				if obj.Destroy then
+					obj:Destroy()
+				end
 			end
 
 			for _, obj in pairs(self.Objects) do
-				obj:Destroy()
+				if obj.Destroy then
+					obj:Destroy()
+				end
 			end
 		end;
 	}, Core)
@@ -406,7 +410,9 @@ function Library.Init(self, Data)
 			Parent = self;
 			Destroy = function(self)
 				for _, obj in pairs(self.Objects) do
-					obj:Destroy()
+					if obj.Destroy then
+						obj:Destroy()
+					end
 				end
 			end;
 		}, Option_Interface)
@@ -469,7 +475,9 @@ function Library.Init(self, Data)
 			end;
 			Destroy = function(self)
 				for _, obj in pairs(self.Objects) do
-					obj:Destroy()
+					if obj.Destroy then
+						obj:Destroy()
+					end
 				end
 			end;
 		}, Option_Interface)
@@ -530,7 +538,9 @@ function Library.Init(self, Data)
 					end;
 					Destroy = function(self)
 						for _, obj in pairs(self.Objects) do
-							obj:Destroy()
+							if obj.Destroy then
+								obj:Destroy()
+							end
 						end
 					end;
 				}, Notification)
@@ -587,7 +597,9 @@ function Library.Init(self, Data)
 			end;
 			Destroy = function(self)
 				for _, obj in pairs(self.Objects) do
-					obj:Destroy()
+					if obj.Destroy then
+						obj:Destroy()
+					end
 				end
 			end;
 		}, Core)
@@ -626,7 +638,9 @@ function Library.Init(self, Data)
 
 		Validate.Objects.Logo.MouseButton1Click:Connect(function()
 			for _, obj in pairs(Validate.Objects) do
-				obj:Destroy()
+				if obj.Destroy then
+					obj:Destroy()
+				end
 			end
 		end)
 
@@ -684,7 +698,9 @@ function Library.Init(self, Data)
 				end;
 				Destroy = function(self)
 					for _, obj in pairs(self.Objects) do
-						obj:Destroy()
+						if obj.Destroy then
+							obj:Destroy()
+						end
 					end
 				end;
 			}, Validate)
@@ -856,11 +872,15 @@ function Library.Init(self, Data)
 			Tabs = {};
 			Destroy = function(self)
 				for _, obj in pairs(self.Tabs) do
-					obj:Destroy()
+					if obj.Destroy then
+						obj:Destroy()
+					end
 				end
 
 				for _, obj in pairs(self.Objects) do
-					obj:Destroy()
+					if obj.Destroy then
+						obj:Destroy()
+					end
 				end
 			end;
 		}, Window)
@@ -1014,11 +1034,15 @@ function Library.Init(self, Data)
 				Disabled = {};
 				Destroy = function(self)
 					for _, obj in pairs(self.Sections) do
-						obj:Destroy()
+						if obj.Destroy then
+							obj:Destroy()
+						end
 					end
 
 					for _, obj in pairs(self.Objects) do
-						obj:Destroy()
+						if obj.Destroy then
+							obj:Destroy()
+						end
 					end
 				end;
 			}, Tab)
@@ -1245,7 +1269,9 @@ function Library.Init(self, Data)
 					Parent = self;
 					Destroy = function(self)
 						for _, obj in pairs(self.Objects) do
-							obj:Destroy()
+							if obj.Destroy then
+								obj:Destroy()
+							end
 						end
 					end;
 				}, Interface)
@@ -1388,7 +1414,9 @@ function Library.Init(self, Data)
 					Interfaces = {};
 					Destroy = function(self)
 						for _, obj in pairs(self.Objects) do
-							obj:Destroy()
+							if obj.Destroy then
+								obj:Destroy()
+							end
 						end
 					end;
 				}, Section)
@@ -1451,7 +1479,9 @@ function Library.Init(self, Data)
 						Parent = self;
 						Destroy = function(self)
 							for _, obj in pairs(self.Objects) do
-								obj:Destroy()
+								if obj.Destroy then
+									obj:Destroy()
+								end
 							end
 						end;
 					}, Interface)
@@ -1480,7 +1510,9 @@ function Library.Init(self, Data)
 						Parent = self;
 						Destroy = function(self)
 							for _, obj in pairs(self.Objects) do
-								obj:Destroy()
+								if obj.Destroy then
+									obj:Destroy()
+								end
 							end
 						end;
 					}, Interface)
@@ -1554,7 +1586,9 @@ function Library.Init(self, Data)
 						end;
 						Destroy = function(self)
 							for _, obj in pairs(self.Objects) do
-								obj:Destroy()
+								if obj.Destroy then
+									obj:Destroy()
+								end
 							end
 						end;
 					}, Interface)
@@ -1618,7 +1652,9 @@ function Library.Init(self, Data)
 						end;
 						Destroy = function(self)
 							for _, obj in pairs(self.Objects) do
-								obj:Destroy()
+								if obj.Destroy then
+									obj:Destroy()
+								end
 							end
 						end;
 					}, Interface)
@@ -1687,7 +1723,9 @@ function Library.Init(self, Data)
 						end;
 						Destroy = function(self)
 							for _, obj in pairs(self.Objects) do
-								obj:Destroy()
+								if obj.Destroy then
+									obj:Destroy()
+								end
 							end
 						end;
 					}, Interface)
@@ -1920,7 +1958,9 @@ function Library.Init(self, Data)
 						end;
 						Destroy = function(self)
 							for _, obj in pairs(self.Objects) do
-								obj:Destroy()
+								if obj.Destroy then
+									obj:Destroy()
+								end
 							end
 						end;
 					}, Interface)
@@ -2126,7 +2166,9 @@ function Library.Init(self, Data)
 						end;
 						Destroy = function(self)
 							for _, obj in pairs(self.Objects) do
-								obj:Destroy()
+								if obj.Destroy then
+									obj:Destroy()
+								end
 							end
 						end;
 					}, Interface)
