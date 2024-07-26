@@ -6,7 +6,7 @@ Anti-Debug is meant for exploiters (or perhaps game developers) who want to poss
 ```luau
 local AntiDebug = loadstring(game:HttpGet("https://raw.githubusercontent.com/Hosvile/InfiniX/main/Library/Anti/AntiDebug/main.lua", true))()
 
-if not (AntiDebug == "true") then
+if not (type(AntiDebug) == "table") then
   while true do end
 end
 ```
