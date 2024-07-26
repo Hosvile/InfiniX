@@ -10,3 +10,10 @@ if not (AntiDebug == "true") then
   while true do end
 end
 ```
+
+## Whitelisted Actions
+```lua
+AntiDebug:hookfunction(closure, newclosure)
+AntiDebug:hookmetamethod(metatable, method, closure)
+AntiDebug:clonefunction(closure)
+```
