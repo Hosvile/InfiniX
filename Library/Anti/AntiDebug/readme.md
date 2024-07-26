@@ -1,6 +1,6 @@
 # Introduction
 ### What exactly is Anti-Debug?
-Anti-Debug is meant for exploiters (or perhaps game developers) who want to possibly replicate your script and this protects you from remote spies and more. I won't be in depth with what it protects you from to allow for more anonymousity.
+Anti-Debug is meant for exploiters (or perhaps game developers) who want to possibly replicate your script and this protects you from remote spies and more. I won't be in depth with what it protects you from to allow for more anonymity.
 
 # Usage
 ```luau
