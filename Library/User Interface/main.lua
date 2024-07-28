@@ -570,7 +570,7 @@ function Library.Init(self, Data)
 		Core.Objects.Notifications.CanvasPosition = Vector2.new(0, math.huge)
 
 		game:GetService("Debris"):AddItem(Notification.Objects.Frame, Data.Duration or 60)
-		
+
 		return Notification.Table
 	end
 
@@ -653,11 +653,21 @@ function Library.Init(self, Data)
 			{1, "UIGradient", {Rotation = -45, Offset = Vector2.new(0.25, 0), Transparency = NumberSequence.new({NumberSequenceKeypoint.new(0, 0), NumberSequenceKeypoint.new(1 - 45/200 - 0.001, 0), NumberSequenceKeypoint.new(1 - 45/200, 1), NumberSequenceKeypoint.new(1, 1)}), Parent = Validate.Objects.Receiver}};
 		})
 
-		Utility:Create({
+		Validate.Objects.Input = Utility:Create({
 			{1, "Frame", {Name = "TitleContainer", Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(67/96, 0, 17/20, 0), AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.new(8/96, 0, 0.5, 0), BackgroundColor3 = Library.Theme.Secondary[3].Color, BackgroundTransparency = 1, Parent = Validate.Objects.Receiver}};
 			{2, "Frame", {Name = "TextCursor", Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeYY, Size = UDim2.new(3/17, 0, 12/17, 0), AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.new(-6/86, 0, 0.5, 0), BackgroundColor3 = Library.Theme.Primary[2].Color, BackgroundTransparency = 0, Parent = {1}}};
 			{3, "TextLabel", {Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(1, 0, 0.75, 0), AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.new(0, 0, 0.5, 0), BackgroundColor3 = Library.Theme.Primary[7].Color, BackgroundTransparency = 1, Font = 36, TextScaled = true, TextWrapped = true, TextXAlignment = 0, Text = Data.Text or "", TextSize = 18, TextColor3 = Library.Theme.Primary[6].Color, Parent = {1}}};
 		})
+		
+		Validate.Objects.Placeholder = Utility:Create({
+			{1, "TextLabel", {Name = "Placeholder", Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(1, 0, 0.75, 0), AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.new(0, 0, 0.5, 0), BackgroundColor3 = Library.Theme.Primary[7].Color, BackgroundTransparency = 1, Font = 36, TextScaled = true, TextWrapped = true, TextXAlignment = 0, Text = Data.Placeholder or "", TextSize = 18, TextColor3 = Library.Theme.Primary[6].Color, TextTransparency = 0.5, Parent = Validate.Objects.Input}};
+		})
+		
+		if Data.Text and Data.Text ~= "" then
+			Validate.Objects.Placeholder.Visible = false
+		else
+			Validate.Objects.Placeholder.Visible = true
+		end
 
 		Validate.Objects.Login = (Library.Create:Pager(Validate.Objects.Main, Data, {XX = 300, X = 150, Y = 25})).Objects.Pager
 
@@ -684,6 +694,12 @@ function Library.Init(self, Data)
 		Validate.Objects.Buttons = Utility:Create({
 			{1, "Folder", {Name = "Buttons", Parent = Validate.Objects.Bar}};
 			{2, "UIListLayout", {Padding = UDim.new(5/300, 0), VerticalAlignment = Enum.VerticalAlignment.Center, FillDirection = Enum.FillDirection.Horizontal, SortOrder = 2, Parent = {1}}};
+		})
+		
+		Validate.Objects.Description = Utility:Create({
+			{1, "Frame", {Name = "Container", Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeYY, Size = UDim2.new(35/35, 0, 27.5/35, 0), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0, 0, 0, 0), BackgroundColor3 = Library.Theme.Secondary[5].Color, BackgroundTransparency = 1, ZIndex = 2, Parent = Validate.Objects.Buttons}};
+			--{2, "UIStroke", {Color = Library.Theme.Primary[3].Color, Thickness = 1, Transparency = 0.5, Parent = {1}}};
+			{3, "TextLabel", {Active = false, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0.5, 0, 0.5, 0), BackgroundTransparency = 1, Size = UDim2.new(1, 0, 1, 0), Font = Enum.Font.TitilliumWeb, Text = "Get Key:", TextColor3 = Library.Theme.Primary[6].Color, TextScaled = true, Parent = {1}}};
 		})
 
 		for _, Button in ipairs(Data.Buttons) do
@@ -744,8 +760,9 @@ function Library.Init(self, Data)
 				Button.Function(Button)
 			end)
 		end
-
+		
 		if Data.Tutorial then
+			--[[
 			Core:Notify({
 				Name = "Infinixity";
 				Title = "Get Key";
@@ -775,6 +792,7 @@ function Library.Init(self, Data)
 					};
 				}
 			})
+			--]]
 		end
 
 		local function Callback()
@@ -816,6 +834,13 @@ function Library.Init(self, Data)
 						local Text = Data.ContentText and Prompt.Objects.Receiver.ContentText or Prompt.Objects.Receiver.Text
 						Data.Text = Text
 						Validate.Objects.Receiver.TitleContainer.TextLabel.Text = Text
+						
+						if Data.Text and Data.Text ~= "" then
+							Validate.Objects.Placeholder.Visible = false
+						else
+							Validate.Objects.Placeholder.Visible = true
+						end
+						
 						Data.Function(Data, Text, false)
 					end)
 
@@ -951,6 +976,10 @@ function Library.Init(self, Data)
 			{1, "ImageButton", {Name = "Logo", AutoButtonColor = false, Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXX, Size = UDim2.new(20/181, 0, 20/181, 0), AnchorPoint = Vector2.new(0, 0), Position = UDim2.new(18/181, 0, 6/181, 0), BackgroundColor3 = Library.Theme.Primary[6].Color, BackgroundTransparency = 1, Image = "rbxassetid://15573193338", Parent = Window.Objects.Frame}};
 		})
 
+		Window.Objects.Service = Utility:Create({
+			{1, "TextLabel", {Active = false, SizeConstraint = Enum.SizeConstraint.RelativeXY, BackgroundTransparency = 1, Size = UDim2.new(0.5, 0, 0.05, 0), Position = UDim2.new(0.5, 0, 0.055, 0), AnchorPoint = Vector2.new(0.5, 0.5), Font = Enum.Font.Sarpanch, Text = Data.Name, TextXAlignment = Enum.TextXAlignment.Left, TextScaled = true, TextSize = Window.Objects.Frame.AbsoluteSize.Y/10, TextColor3 = Library.Theme.Primary[1].Color, Parent = Window.Objects.Frame}};
+		})
+
 		Window.Objects.Separator = Utility:Create({
 			{1, "Folder", {Name = "Separators", Parent = Window.Objects.Frame}};
 			{2, "Frame", {Name = "Separator", Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXX, Size = UDim2.new(0.80110497238, 0, 0.00552486188, 0), AnchorPoint = Vector2.new(0, 0), Position = UDim2.new(0.09944751381, 0, 0.11049723757, 0), BackgroundColor3 = Library.Theme.Primary[6].Color, BackgroundTransparency = 0, Parent = {1}}};
@@ -1077,15 +1106,15 @@ function Library.Init(self, Data)
 			Tab.Objects.Frame = Utility:Create({
 				{1, "Frame", {Name = "Tab_" .. Data.Name, Visible = false, Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(44/609, 0, 437/437, 0), AnchorPoint = Vector2.new(0, 0), Position = UDim2.new(564/609, 0, 0, 0), BackgroundColor3 = Library.Theme.Primary[6].Color, BackgroundTransparency = 0, Parent = Tab.Objects.Folder}};
 			})
-			
+
 			Tab.Objects.Container = Utility:Create({
 				{1, "Frame", {Name = "Container", Visible = false, Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(44/44, 0, 437/437, 0), AnchorPoint = Vector2.new(0, 0), Position = UDim2.new(0, 0, 0, 0), BackgroundColor3 = Library.Theme.Primary[7].Color, BackgroundTransparency = 1, Parent = Tab.Objects.Frame}};
 			})
-			
+
 			Utility:Create({
 				{1, "UIGradient", {Rotation = math.deg(math.atan2(Tab.Objects.Frame.AbsolutePosition.Y - (Tab.Objects.Frame.AbsolutePosition.Y + Window.Objects.Window.AbsoluteSize.Y*(381/381)/2), Tab.Objects.Frame.AbsolutePosition.X - (Tab.Objects.Frame.AbsolutePosition.X + Window.Objects.Window.AbsoluteSize.X*(429/609)/2))) + 90, Color = ColorSequence.new({ColorSequenceKeypoint.new(0, Library.Theme.Secondary[5].Gradient), ColorSequenceKeypoint.new(0.5, Library.Theme.Secondary[5].Gradient), ColorSequenceKeypoint.new(0.501, Library.Theme.Secondary[5].Color), ColorSequenceKeypoint.new(1, Library.Theme.Secondary[5].Color)}), Parent = Tab.Objects.Frame}};
 			})
-			
+
 			Tab.Objects.SearchBar = Utility:Create({
 				{1, "Frame", {Name = "SearchBar", Visible = false, Active = true, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(377/429, 0, 30/381, 0), AnchorPoint = Vector2.new(0, 0), Position = UDim2.new(8/429, 0, 8/381, 0), BackgroundColor3 = Library.Theme.Secondary[3].Color, BackgroundTransparency = 0, Parent = Tab.Objects.Frame}};
 				{2, "UICorner", {CornerRadius = UDim.new(0.2, 0), Parent = {1}}};
@@ -1453,7 +1482,7 @@ function Library.Init(self, Data)
 
 				Section.Objects.Box = Utility:Create({
 					{1, "ScrollingFrame", {Name = "Section_" .. Data.Name, Visible = #self.Sections == 0, Active = true, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(369/429, 0, 318/381, 0), AnchorPoint = Vector2.new(0, 0), Position = UDim2.new(18/429, 0, 43/381, 0), BackgroundColor3 = Library.Theme.Primary[6].Color, BackgroundTransparency = 1, CanvasSize = UDim2.new(0, 0, 0, 0), VerticalScrollBarInset = 0, HorizontalScrollBarInset = 0, ScrollingDirection = 2, ScrollBarThickness = 2, ElasticBehavior = 0, Parent = Tab.Objects.Container}};
-					{2, "UIGridLayout", {SortOrder = 2, CellSize = UDim2.new(117/369, 0, 132/318, 0), CellPadding = UDim2.new(0, 8, 0, 8), VerticalAlignment = Enum.VerticalAlignment.Top, FillDirection = Enum.FillDirection.Horizontal, FillDirectionMaxCells = 3, Parent = {1}}};
+					{2, "UIGridLayout", {SortOrder = 2, CellSize = UDim2.new(117/369, 0, 132/318, 0), CellPadding = UDim2.new(8/369, 0, 0, 8), VerticalAlignment = Enum.VerticalAlignment.Top, FillDirection = Enum.FillDirection.Horizontal, FillDirectionMaxCells = 3, Parent = {1}}};
 					{3, "UIAspectRatioConstraint", {AspectRatio = 1, AspectType = 0, DominantAxis = 1, Parent = {2}}};
 					--{3, "UIPadding", {PaddingLeft = UDim.new(0, 0), Parent = {1}}};
 				})
@@ -2402,7 +2431,8 @@ Core:Validate({
 	Name = "Infinixity";
 	Tutorial = true;
 	Validate = "abc";
-	Text = "Key here!";
+	Text = "";
+	Placeholder = "Key here!";
 	Buttons = {
 		{
 			Name = "PandaDev";
