@@ -10,9 +10,6 @@ local service = setmetatable({}, {
 })
 
 local Players = service.Players
-
-repeat task.wait() until Players.LocalPlayer
-
 local LocalPlayer = Players.LocalPlayer
 
 --References
