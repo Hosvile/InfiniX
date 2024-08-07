@@ -820,7 +820,7 @@ function Library.Init(self, Data)
 					})
 
 					Prompt.Objects.Receiver = Utility:Create({
-						{1, "TextBox", {Name = "Input_" .. Data.Name, Active = true, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXX, Size = UDim2.new(609/609, 0, 50/609, 0), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0.5, 0, 0.5, 0), BackgroundColor3 = Library.Theme.Secondary[5].Color, BackgroundTransparency = 1, ClearTextOnFocus = false, TextScaled = false, TextWrapped = true, TextColor3 = Library.Theme.Primary[6].Color, Text = Data.ClearTextOnFocus and "" or Data.Text or "", Parent = Prompt.Objects.Frame}};
+						{1, "TextBox", {Name = "Input_" .. Data.Name, Active = true, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXX, Size = UDim2.new(609/609, 0, 50/609, 0), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0.5, 0, 0.5, 0), BackgroundColor3 = Library.Theme.Secondary[5].Color, BackgroundTransparency = 1, ClearTextOnFocus = false, PlaceholderText = Data.Placeholder or "", TextScaled = false, TextWrapped = true, TextColor3 = Library.Theme.Primary[6].Color, Text = Data.ClearTextOnFocus and "" or Data.Text or "", Parent = Prompt.Objects.Frame}};
 						--{2, "UICorner", {CornerRadius = UDim.new(0.2, 0), Parent = {1}}};
 					})
 
