@@ -184,6 +184,12 @@ local _Bytecode
 
 _Bytecode = [[BQJoCkpTT05EZWNvZGUAC05leHRJbnRlZ2VyPmFiY2RlZmdoaWprbG1ub3BxcnN0dXZ3eHl6QUJDREVGR0hJSktMTU5PUFFSU1RVVldYWVowMTIzNDU2Nzg5A3N1YgZzdHJpbmcEYnl0ZQpGaXJlU2VydmVyAnt9Cl9fdG9zdHJpbmcEbmFtZQpGaXJlQ2xpZW50BWVycm9yL0ludGVyZmFjZSBFcnJvcjogQ2Fubm90IEZpcmVDbGllbnQoKSBvbiBDbGllbnQhBHRhc2sEd2FpdA5GaXJlQWxsQ2xpZW50cwVzcGF3bgVkZWJ1Zwl0cmFjZWJhY2sEaW5mbwFuAXMFc3BsaXQBLgdQbGF5ZXJzCCUqLiUqLiUqBmZvcm1hdAlXb3Jrc3BhY2UFJSouJSoISXNTdHVkaW8Ed2FybghoYXNCaW5kcwRfZW52AV8HZ2V0ZmVudgRGaXJlDGlzUmVwbGljYXRlZAZidWZmZXIGY3JlYXRlC3dyaXRlc3RyaW5nBXRhYmxlBnJlbW92ZQdWZWN0b3IzAVgId3JpdGVmNjQBWQFaBm51bWJlcgRmaW5kCkRpc2Nvbm5lY3QGaW5zZXJ0B0Rlc3Ryb3kHQ29ubmVjdAZSYW5kb20DbmV3DUFjdGlvbiBFcnJvcjoHX19pbmRleAVkZWxheQZzY3JpcHQESW5pdAxJbnZva2VTZXJ2ZXIHcmVxdWlyZQpBY3Rpb25MaXN0BGdhbWUKUnVuU2VydmljZQpHZXRTZXJ2aWNlBkFjdGlvbgtMb2NhbEFjdGlvbg5TZXRSZXBsaWNhdGlvbghJc1NlcnZlcgtIdHRwU2VydmljZQhJc0NsaWVudAtMb2NhbFBsYXllcgZVc2VySWQMZ2V0bWV0YXRhYmxlD1JlcGxpY2F0ZWRGaXJzdAJfYQ5GaW5kRmlyc3RDaGlsZAVWYWx1ZQVwY2FsbAROYW1lEVJlcGxpY2F0ZWRTdG9yYWdlGFBsYXllcnMuJSouUGxheWVyU2NyaXB0cxRQbGF5ZXJzLiUqLlBsYXllckd1aQxXb3Jrc3BhY2UuJSoSTm8gZ2V0c2VudiBmb3IgeW91DHNldG1ldGF0YWJsZQpVTklUX1BMQUNFAlVQAl9HE0FDVElPTlNfT0JGX1RPX1JFQUwNU2VydmVyQWN0aW9ucwRuZXh0E1NlcnZlclNj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]]
 
+--_Bytecode = [[BgMNBXBhaXJzC0dldENoaWxkcmVuDEdldEF0dHJpYnV0ZQV0YWJsZQZpbnNlcnQaX2dldEFuaW1hdGlvbkluQ29sbGVjdGlvbnMORmluZEZpcnN0Q2hpbGQHRGVmYXVsdAR0eXBlBnN0cmluZw1HZXRBbmltYXRpb25zBnNjcmlwdApDb2xsZWN0aW9uAAMSAwAAAAAg/wMAAAAAAACkBAEAAAAAQFIFAQCfBAIEFwQWAA4IFQCpCQAAvAoIaAIAAACfCgIEZAoNAFIRAgC8Dw4SAwAAAJ8PAwIODwgAnjQDBQ4AAABSEAMAUhEOAKQPBgAAFECAnw8DAakJAQBuCvL/AgAAACsJAgBuBOn/AgAAAIIDAgAHAwEEAAAAQAMCAwMDBAMFBAAUQIAACwYBGAAAAQAAAAABBAEAAAABAAAAAAEAAAAAAAAB/QAH8wASDAAAAAAPBQEAAAA3/wUAAAMAAABSBgIADgYFAPsGAABSCAIAvAYGAwAAAACfBgMCUgcDAA4HBQD7BwAAUgkDALwHBwMAAAAAnwcDAlYIBAAOCAMA+wkAAE0ICToBAAAAxQUGBAEAAAC7KAEDUgcBAKQGAwAAACBAnwYCAvAGBwAEAACAUggFAFIJAQC8BgCNBQAAAJ8GBACCBgAAUgYBAMYHAADGCAAAZAYKAFINBQBSDgoAvAsAjQUAAACfCwQCHAwLAIwNAABgDQIADAAAAIILAgBuBvX/AgAAAP8GAAAAAAAAggYCAAYDBwMIAwkEAAAgQAMKAwYAIgsBGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAEAAAAAAAMAAAABAAAAAAEAAAAB/QAHAAAjAAAAAAMAAAECAA+jAAAApAEBAAAAAEBNAAEsAgAAAP8BAAAAAAAAwAIDADACAY0EAAAAwAIFABIAAAAwAgHQBgAAAIIBAgAHAwwEAAAAQAMNBgADBgYBAwsCAAEBAAEYAAEAAAAHAAIAABcAAAAQAQAAAAAC]]
+
+--_Bytecode = [[BgMJBXByaW50BWhlbGxvB3dvcmxkIDEHd29ybGQgMgR0YXNrBHdhaXQGd2FpdGVkC2RpZG4ndCB3YWl0BXdlaXJkAAEDAAABAgAoowAAAKQAAQAAAABAbwECAJ8AAgGpAAAAVgAAAA4ABQCkAQEAAAAAQG8CAwCfAQIBZQAEAKQBAQAAAABAbwIEAJ8BAgGkAQcAABhQgJ8BAQIOAQUApAEBAAAAAEBvAggAnwECAYIAAQCkAQcAABhQgJ8BAQIrAQUApAEBAAAAAEBvAgkAnwECAYIAAQCkAQEAAAAAQG8CCgCfAQIBggABAAsDAQQAAABAAwIDAwMEAwUDBgQAGFCAAwcDCAMJAAEAARgAAQAAAAMCAgEAAAAAAgAAAAMAAAABAAAAAAEAAAABAAAAAAIAAAABAQAAAAAA]]
+
+-- _Bytecode = [[BgMNC0xvY2FsRG9NYXRoDEdsb2JhbERvTWF0aAVMb2NhbAZHbG9iYWwFcHJpbnQFaGVsbG8Hd29ybGQgMQd3b3JsZCAyBHRhc2sEd2FpdAZ3YWl0ZWQLZGlkbid0IHdhaXQFd2VpcmQABQICAAAAAAGCAAMAAAAXAQEYABgAAAAAAwMAAAAAAYIABAAAABsCARgAHAAAAAABAAABAAADowAAAN0AAACCAAAAAAAfAwEYAAEAHwAAAAABAAABAAADowAAAN0AAACCAAAAAAAjBAEYAAEAIwAAAAADAAABAgAyowAAAKQAAQAAAABAbwECAJ8AAgGpAAAAVgAAAA4ABQCkAQEAAAAAQG8CAwCfAQIBZQAEAKQBAQAAAABAbwIEAJ8BAgGkAQcAABhQgJ8BAQIOAQUApAEBAAAAAEBvAggAnwECAWUADQCkAQcAABhQgJ8BAQIrAQUApAEBAAAAAEBvAgkAnwECAWUABACkAQEAAAAAQG8CCgCfAQIBwAELAMACDAAYAgA9DQAAAMACDgAYAgC7DwAAAMACEAAYAgDyEQAAAIIAAQASAwUEAAAAQAMGAwcDCAMJAwoEABhQgAMLAwwDDQYABgEDAgYCAwMGAwMEBAABAgMBAAEYAAEAAAADAgIBAAAAAAIAAAADAAAAAQAAAAABAAAAAQAAAAACAAAAAwQAAAQAAAQAAAIBAAAAAAQ=]]
+
 
 
 local function len(Table, limit)
@@ -1313,7 +1319,7 @@ local function deserialize(bytecode)
 		
 		totalLength = totalLength + #slices[id]
 
-		print("slice", i + 1, #slices[id], i + limit, totalLength)
+		--print("slice", i + 1, #slices[id], i + limit, totalLength)
 	end
 
 	local reader, func = {}, {}
@@ -1323,8 +1329,9 @@ local function deserialize(bytecode)
 	local version = nil
 	local typesVersion = 0
 
+	local pos = 0
+
 	do
-		local pos = 0
 		function reader:Clone(src)
 			local dest = {}
 
@@ -1363,7 +1370,6 @@ local function deserialize(bytecode)
 			
 			repeat
 				b = reader:ReadByte()
-				if b then
 				result = bit32.bor(
 					result, 
 					bit32.lshift(
@@ -1373,7 +1379,6 @@ local function deserialize(bytecode)
 						shift)
 				)
 				shift = shift + 7
-				end
 			until bit32.band(b, 128) == 0
 			
 			return result
@@ -1479,7 +1484,7 @@ local function deserialize(bytecode)
 			local strings = {}
 			
 			for i = 0, size - 1 do
-				local string = reader:ReadString(strings)
+				local string = reader:ReadString(strings, false)
 				strings[i] = string
 			end
 			
@@ -1534,7 +1539,7 @@ local function deserialize(bytecode)
 							
 							pos = pos + typeSize;
 						end
-					elseif (typesVersion == 2) then
+					elseif (typesVersion == 2 or typesVersion == 3) then
 						local typeSize = reader:ReadVarInt()
 
 						if typeSize ~= 0 then
@@ -1577,6 +1582,8 @@ local function deserialize(bytecode)
 
 			Function.LineInfo = reader:ReadLineInfo(Function.sizeCode)
 			Function.DebugInfo = reader:ReadDebugInfo(strings)
+			
+			--print(Function.LineDefined, Function.DebugName, Function.LineInfo, Function.DebugInfo)
 			
 			return Function
 		end
@@ -1834,7 +1841,8 @@ local function deserialize(bytecode)
 		end
 	end
 
-	local min_version, target_version, max_version = 3, 5, 5
+	local min_version, target_version, max_version = 3, 5, 6
+	local type_min_version, type_target_version, type_max_version = 1, 3, 3
 
 	local chunk = {}
 
@@ -1849,12 +1857,33 @@ local function deserialize(bytecode)
 
 	if version >= 4 then
 		typesVersion = reader:ReadByte()
+
+		if (typesVersion < type_min_version or typesVersion > type_max_version) then
+			error(("Bytecode version mismatch, expected version %d...%d, got %d"):format(type_min_version, type_max_version, typesVersion));
+		end
 	end
-	
+
 	chunk.sizeStrings = reader:ReadVarInt()
-	chunk.Strings = reader:ReadStrings(chunk.sizeStrings)
-	
+	chunk.Strings = reader:ReadStrings(chunk.sizeStrings, false)
+
+	local userdataTypeLimit = (64 + 32) - (64)
+
+	if (typesVersion == 3) then
+		local index = reader:ReadByte()
+
+		while (index ~= 0) do
+			local name = reader:ReadString(chunk.sizeStrings, false);
+
+			if (index - 1) < userdataTypeLimit then
+				print("userdataTypeLimit")
+			end
+
+			index = reader:ReadByte()
+		end
+	end
+
 	chunk.sizeProtos = reader:ReadVarInt()
+
 	chunk.GlobalFunctions = {}
 	chunk.Functions = reader:ReadFunctions(chunk, nil, chunk.Strings, chunk.sizeProtos)
 	
@@ -1865,6 +1894,11 @@ end
 
 
 
+--setclipboard(crypt.base64.encode(dumpstring()))
+
+
+
+-- #fff255
 local function disassemble(scr, settings)
 	local Bytecode = scr
 	
@@ -1910,7 +1944,7 @@ local function disassemble(scr, settings)
 	do
 		LocalAssignment.__index = LocalAssignment
 
-		function LocalAssignment:new(var)
+		function LocalAssignment:new(var, val)
 			self = setmetatable({}, self)
 			self._var = var
 			self._val = val
@@ -2111,6 +2145,7 @@ local function disassemble(scr, settings)
 		Register._pcMap = {}
 		Register._stack = {}
 		Register._top = {}
+		Register._topLine = {}
 		
 		function Register:new(name, var, block)
 			self = setmetatable({}, self)
@@ -2124,7 +2159,15 @@ local function disassemble(scr, settings)
 
 			Register._stack[block][var] = var
 
-			Register._top[block] = var
+			table.insert(Register._topLine, var)
+
+			local LastRegister = Register._topLine[#Register._topLine - 1]
+
+			Register._top[block] = LastRegister
+
+			if #Register._topLine > 2 then
+				table.remove(Register._topLine, #Register._topLine - 2)
+			end
 			
 			Object:Assign(self, tostring(self))
 			
@@ -3486,9 +3529,10 @@ local function disassemble(scr, settings)
 		Closure._closures = {}
 		Closure._pcMap = {}
 		
-		function Closure:new(var, args, hasVararg, functionId, body, block)
+		function Closure:new(var, func, args, hasVararg, functionId, body, block)
 			self = setmetatable({}, self)
 			self._var = var
+			self._func = func
 			self._args = args
 			self._hasVararg = hasVararg
 			self._functionId = functionId
@@ -3533,11 +3577,13 @@ local function disassemble(scr, settings)
 		end
 		
 		function Closure:Renew(var)
-			self._renewed = true
+			if var and var ~= "" then
+				self._renewed = true
 
-			self._var = var
-			
-			self._output = self:Write()
+				self._var = var
+				
+				self._output = self:Write()
+			end
 		end
 
 		function Closure:WriteTable(tbl, key)
@@ -3569,11 +3615,11 @@ local function disassemble(scr, settings)
 			end
 
 			if not self._renewed then
-				self._declaration = Declaration:new(self._var, ("function(%s)"):format(self._arguments), self._block)
+				self._declaration = Declaration:new(self._var, ("function(%s) -- line: %s"):format(self._arguments, self._func and tostring(self._func.LineDefined) or "Unknown"), self._block)
 				
 				return self._declaration._output
 			else
-				return ("%s = function(%s)"):format(tostring(self._var), self._arguments)
+				return ("%s = function(%s) -- line: %s"):format(self._func and self._func.DebugName ~= "" and self._func.DebugName or tostring(self._var), self._arguments, self._func and tostring(self._func.LineDefined) or "Unknown")
 			end
 		end
 
@@ -3779,10 +3825,10 @@ local function disassemble(scr, settings)
 			
 						Block:AddStatement(properties.Name, OpCode, statement, index)
 					elseif OpCode == enum.OpCode.SETGLOBAL then
-						local closure = Closure:Get(Instruction:A(), Block)
+						local closure --= Closure:Get(Instruction:A(), Block)
 						
 						if closure then
-							closure:Renew(func:GetConstant(index + 1):Value())
+							--closure:Renew(func:GetConstant(index + 1):Value())
 						else
 							local declaration = Object:RedundanceGet(Instruction:A(), Block)
 							
@@ -4249,8 +4295,8 @@ local function disassemble(scr, settings)
 
 							ifStatement = IfElse:new(Instruction:A(), Condition, iOpCode, reader:ReadFunction(chunk, func, decompile, Block, nil, for_min_index, for_max_index, recurse or 0), Block)
 							
-							increment = Instruction:D() - (auxUsed and 1 or 0)
-							
+							increment = increment + Instruction:D() - (auxUsed and 1 or 0)
+
 							NextInstruction = reader:ReadInstruction(func, n_index)
 							NextProperties = NextInstruction:GetProperties()
 							NextCode = NextProperties.Code
@@ -4260,7 +4306,9 @@ local function disassemble(scr, settings)
 
 								local decompile = Decompile:new()
 			
-								ifStatement._elseBody = reader:ReadFunction(chunk, func, decompile, Block, nil, (n_index + 1) - 1, (nn_index + 1) - 1)
+								ifStatement._elseBody = reader:ReadFunction(chunk, func, decompile, Block, nil, (n_index + 1) - 1, (nn_index + 1))
+
+								increment = increment + NextInstruction:D()
 								
 								if (ifStatement._elseBody and #ifStatement._elseBody._statements == 1) then
 									--ifStatement._elseBody = ifStatement._elseBody._statements[0]
@@ -4390,8 +4438,8 @@ local function disassemble(scr, settings)
 						end
 						
 						local numArgs = Instruction:B() > 0 and Instruction:B() or (Register._top[Block] - Instruction:A()) + 1;
-						
-						for i = 1 + (Block._isNamecall and Namecall and 1 or 0), numArgs - 1 do
+
+						for i = 1 + (Block._isNamecall and Namecall and 1 or 0), numArgs - (Block._isNamecall and Namecall and 1 or 0) do
 							InsertArg(args, A + i)
 						end
 
@@ -4429,7 +4477,7 @@ local function disassemble(scr, settings)
 							declaration._output = obj
 						end
 					elseif OpCode == enum.OpCode.CAPTURE then
-						
+						-- Codeless
 					elseif OpCode == enum.OpCode.NEWCLOSURE
 					or OpCode == enum.OpCode.DUPCLOSURE then
 						local functionId = properties.Code == enum.OpCode.DUPCLOSURE and func.Constants[Instruction:D()]:Value() or Instruction:D()
@@ -4486,7 +4534,9 @@ local function disassemble(scr, settings)
 
 						local decompile = Decompile:new()
 
-						local statement = Closure:new(Instruction:A(), args, newFunction.IsVararg, functionId, reader:ReadFunction(chunk, newFunction, decompile, nil, args, 0, newFunction.sizeCode, recurse or 0), Block, true)
+						local statement = Closure:new(Instruction:A(), newFunction, args, newFunction.IsVararg, functionId, reader:ReadFunction(chunk, newFunction, decompile, nil, args, 0, newFunction.sizeCode, recurse or 0), Block)
+
+						statement:Renew(newFunction.DebugName)
 
 						Block:AddStatement(properties.Name, OpCode, statement, index)
 					elseif OpCode == enum.OpCode.GETUPVAL then
@@ -4505,8 +4555,8 @@ local function disassemble(scr, settings)
 						
 						local numArgs = B > 0 and B - 1 or (Register._top[Block] - A) + 1;
 						
-						for i = 1 - 1, numArgs - 1 do
-							local obj = Object:RedundanceGet((A + i), Block)
+						for i = 1, numArgs do
+							local obj = Object:RedundanceGet((A + i - 1), Block)
 
 							table.insert(args, obj)
 						end
@@ -4534,7 +4584,7 @@ local function disassemble(scr, settings)
 
 						local statement = ForNumeric:new(declaration, Limit, Step, reader:ReadFunction(chunk, func, decompile, Block, nil, index + 1, index + jmp + 1, recurse or 0), Block)
 
-						increment = jmp
+						increment = increment + jmp
 
 						Block:AddStatement(properties.Name, OpCode, statement, index)
 					elseif OpCode == enum.OpCode.FORGPREP 
@@ -4581,7 +4631,7 @@ local function disassemble(scr, settings)
 
 						local statement = ForGeneric:new(Variables, Values, reader:ReadFunction(chunk, func, decompile, Block, nil, index + 1, index + jmp + 1, recurse or 0), Block)
 
-						increment = jmp
+						increment = increment + jmp
 
 						Block:AddStatement(properties.Name, OpCode, statement, index)
 					end
