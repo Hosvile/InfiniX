@@ -55,3 +55,5 @@ local TargetHitbox = function(Hitbox, func)
 		end
 	end
 end
+
+return TargetHitbox
