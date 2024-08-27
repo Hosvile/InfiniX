@@ -4526,7 +4526,7 @@ local function disassemble(scr, newSettings)
 							local captureType = capture:A()
 
 							if (captureProperties.Code ~= enum.OpCode.CAPTURE) then
-								-- error(("Expected capture instruction following NEWCLOSURE/DUPCLOSURE (fId: {%d}, code: {%d}, pc: {%d})"):format(func.Id, captureProperties.Code, index))
+								error(("Expected capture instruction following NEWCLOSURE/DUPCLOSURE (fId: {%d}, code: {%d}, pc: {%d})"):format(func.Id, captureProperties.Code, index))
 							end
 
 							if captureType == enum.CaptureType.Reference and properties.Code == enum.OpCode.DUPCLOSURE then
@@ -4536,7 +4536,7 @@ local function disassemble(scr, newSettings)
 							elseif captureType == enum.CaptureType.Upvalue then
 								expression = func.Upvalues[capture:B()]
 							else
-								-- error(("Unknown capture type"):format(captureType))
+								-- error(("Unknown capture type %d"):format(captureType))
 
 								expression = Object:RedundanceGet(capture:B(), Block)
 							end
