@@ -4115,10 +4115,13 @@ local function disassemble(scr, newSettings)
 							leftValue = Object:RedundanceGet(left, Block) or ("[NOT FOUND %s]"):format(tostring(left))
 						end
 
-						if OpCode < enum.OpCode.ADDK then
-							rightValue = right
+						if OpCode == enum.OpCode.DIVRK
+						or OpCode == enum.OpCode.SUBRK then
+							rightValue = Object:RedundanceGet(Instruction:C(), Block) or ("[NOT FOUND %s]"):format(tostring(right))
+						elseif OpCode < enum.OpCode.ADDK then
+							rightValue = Instruction:C()
 						else
-							rightValue = Object:RedundanceGet(Instruction:C(), Block)
+							rightValue = right
 						end
 
 						local statement = Declaration:new(Instruction:A(), Operation:new(leftValue, BinaryExpression:BinaryOperationChar(operation), rightValue, Block)._output, Block)
