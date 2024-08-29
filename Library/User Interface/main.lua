@@ -923,7 +923,7 @@ function Library.Init(self, Data)
 		})
 
 		Window.Objects.Canvas = Utility:Create({
-			{1, "CanvasGroup", {Name = "Window_" .. Data.Name, Active = true, ClipsDescendants = true, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(609/1143.503, 0, 437/513.318, 0), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0.5, 0, 0.5, 0), BackgroundColor3 = Library.Theme.Primary[7].Color, BackgroundTransparency = 0.975, Parent = Window.Objects.Folder}};
+			{1, "Frame", {Name = "Window_" .. Data.Name, Active = true, ClipsDescendants = true, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(609/1143.503, 0, 437/513.318, 0), AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0.5, 0, 0.5, 0), BackgroundColor3 = Library.Theme.Primary[7].Color, BackgroundTransparency = 0.975, Parent = Window.Objects.Folder}};
 			{2, "UIScale", {Scale = Data.Scale or 1, Parent = {1}}};
 			{3, "Frame", {Name = "Container", Active = false, BorderSizePixel = 0, SizeConstraint = Enum.SizeConstraint.RelativeXY, Size = UDim2.new(609/609, 0, 381/437, 0), AnchorPoint = Vector2.new(0, 0), Position = UDim2.new(0, 0, 0, 0), BackgroundColor3 = Library.Theme.Primary[7].Color, BackgroundTransparency = 1, Parent = {1}}};
 			{4, "UICorner", {CornerRadius = UDim.new(0.02, 0), Parent = {1}}};
