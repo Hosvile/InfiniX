@@ -3844,7 +3844,7 @@ local function disassemble(scr, newSettings)
 				local index = pcStart
 
 				while (not Skip) and (index < pcEnd) do
-					print(index, pcEnd, func.sizeCode)
+					-- print(index, pcEnd, func.sizeCode)
 
 					if index >= 4200 then
 						-- Skip = true
