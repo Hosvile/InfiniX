@@ -2303,6 +2303,14 @@ local function disassemble(scr, newSettings)
 				Register._stack[block] = {}
 			end
 
+			if not block then
+				print("Register:new block not found:", block, debug.traceback())
+			end
+
+			if not var then
+				print("Register:new var not found:", var, debug.traceback())
+			end
+			
 			Register._stack[block][var] = var
 
 			table.insert(Register._topLine, var)
@@ -3569,7 +3577,7 @@ local function disassemble(scr, newSettings)
 
 					arg = arg._val._output
 				else
-					arg = arg._registers[1]._output
+					arg = arg and arg._registers[1] and arg._registers[1]._output or ("ARG NOT FOUND: %s"):format(tostring(arg), tostring(arg and arg._registers[1]))
 				end
 
 				local regex = "%s:%s(%s)"
@@ -3895,7 +3903,7 @@ local function disassemble(scr, newSettings)
 				while (not Skip) and (index < pcEnd) do
 					-- print(index, pcEnd, func.sizeCode)
 
-					if index >= 4200 then
+					if false and index >= 4200 then
 						-- Skip = true
 
 						print("SKIPPING BECAUSE TOO BIG!")
@@ -3961,7 +3969,9 @@ local function disassemble(scr, newSettings)
 						
 						Block:AddStatement(properties.Name, OpCode, statement, index)
 					elseif OpCode == enum.OpCode.GETGLOBAL then
-						local statement = Declaration:new(Instruction:A(), Plain:new(func:GetConstant(index + 1):Value(), enum.KeywordType.Value), Block)
+						local constant = func:GetConstant(index + 1)
+
+						local statement = Declaration:new(Instruction:A(), Plain:new(constant and constant:Value() or ("CONSTANT NOT FOUND: %d"):format(index + 1), enum.KeywordType.Value), Block)
 			
 						Block:AddStatement(properties.Name, OpCode, statement, index)
 					elseif OpCode == enum.OpCode.SETGLOBAL then
@@ -4011,7 +4021,7 @@ local function disassemble(scr, newSettings)
 
 								tbl:Insert(TableAssign:new(Declaration:Get(Instruction:B() + i - 1, Block), Plain:new(tostring(i), enum.KeywordType.Number), declaration._val, Block))
 
-								tbldeclaration:Renew(tbl._variable, tbl)
+								tbldeclaration:Renew(tbl._variable or ("SETLIST TBL VARIABLE NOT FOUND: %d"):format(Instruction:B() + i - 1), tbl)
 							end
 						end
 					elseif OpCode == enum.OpCode.GETTABLE then
@@ -4329,7 +4339,9 @@ local function disassemble(scr, newSettings)
 						
 						Block:AddStatement(properties.Name, OpCode, statement, index)
 					elseif OpCode == enum.OpCode.CONCAT then
-						local statement = Declaration:new(Instruction:A(), Operation:new(Declaration:Get(Instruction:B(), Block)._registers[1]._output, "..", Declaration:Get(Instruction:C(), Block)._registers[1]._output, Block), Block)
+						local declarationB, declarationC = Declaration:Get(Instruction:B(), Block), Declaration:Get(Instruction:C(), Block)
+
+						local statement = Declaration:new(Instruction:A(), Operation:new(declarationB and declarationB._registers[1]._output or ("DECLARATION B NOT FOUND: %d"):format(Instruction:B()), "..", declarationC and declarationC._registers[1]._output or ("DECLARATION C NOT FOUND: %d"):format(Instruction:C()), Block), Block)
 			
 						Block:AddStatement(properties.Name, OpCode, statement, index)
 					elseif OpCode == enum.OpCode.NOT
@@ -4552,81 +4564,86 @@ local function disassemble(scr, newSettings)
 							local n_index = index + Instruction:D()
 
 							NextInstruction = reader:ReadInstruction(func, n_index)
-							NextProperties = NextInstruction:GetProperties() 
-							NextCode = NextProperties.Code
 
-							local StatingNextInstruction = false
-							
-							if (not NextInstruction.Stated) then
-								if NextCode == enum.OpCode.JUMP then
-									StatingNextInstruction = true
+							if NextInstruction then
+								NextProperties = NextInstruction:GetProperties() 
+								NextCode = NextProperties.Code
 
-									NextInstruction.Stated = true
+								local StatingNextInstruction = false
+								
+								if (not NextInstruction.Stated) then
+									if NextCode == enum.OpCode.JUMP then
+										StatingNextInstruction = true
+
+										NextInstruction.Stated = true
+									end
 								end
-							end
 
-							local for_min_index = (index + (auxUsed and 2 or 1))
-							local for_max_index = (n_index + 1)
+								local for_min_index = (index + (auxUsed and 2 or 1))
+								local for_max_index = (n_index + 1)
 
-							local body, traversed, remainder = reader:ReadFunction(chunk, func, decompile, block, nil, for_min_index, for_max_index, nil, recurse or 0)
+								local body, traversed, remainder = reader:ReadFunction(chunk, func, decompile, block, nil, for_min_index, for_max_index, nil, recurse or 0)
 
-							ifStatement = IfElse:new(Instruction:A(), Condition, iOpCode, body, Block)
-							
-							increment = increment + traversed + remainder
+								ifStatement = IfElse:new(Instruction:A(), Condition, iOpCode, body, Block)
+								
+								increment = increment + traversed + remainder
 
-							if NextCode == enum.OpCode.JUMP then -- else statement
-								if StatingNextInstruction then
-									local nn_index = n_index + NextInstruction:D()
+								if NextCode == enum.OpCode.JUMP then -- else statement
+									if StatingNextInstruction then
+										local nn_index = n_index + NextInstruction:D()
 
-									local decompile = Decompile:new()
-				
-									local block = BlockObj:new(Block, debugMode)
+										local decompile = Decompile:new()
+					
+										local block = BlockObj:new(Block, debugMode)
 
-									local for_min_index = (n_index + 1)
-									local for_max_index = (nn_index + 1)
-									
-									local body, traversed, remainder = reader:ReadFunction(chunk, func, decompile, block, nil, for_min_index, for_max_index, nil, recurse or 0)
+										local for_min_index = (n_index + 1)
+										local for_max_index = (nn_index + 1)
+										
+										local body, traversed, remainder = reader:ReadFunction(chunk, func, decompile, block, nil, for_min_index, for_max_index, nil, recurse or 0)
 
-									ifStatement._elseBody = body
-									
-									increment = increment + traversed + remainder
+										ifStatement._elseBody = body
+										
+										increment = increment + traversed + remainder
 
-									if (ifStatement._elseBody and len(ifStatement._elseBody._statements) >= 2) then
-										local Statement = ifStatement._elseBody._statements[0]
-										local OpCode = Statement:OpCode()
+										if (ifStatement._elseBody and len(ifStatement._elseBody._statements) >= 2) then
+											local Statement = ifStatement._elseBody._statements[0]
+											local OpCode = Statement:OpCode()
 
-										if OpCode == enum.OpCode.JUMPIF 
-										or OpCode == enum.OpCode.JUMPIFNOT
-										or OpCode == enum.OpCode.JUMPIFEQ 
-										or OpCode == enum.OpCode.JUMPIFNOTEQ 
-										or OpCode == enum.OpCode.JUMPIFNOTLT
-										or OpCode == enum.OpCode.JUMPIFLT
-										or OpCode == enum.OpCode.JUMPIFNOTLE
-										or OpCode == enum.OpCode.JUMPIFLE
-										or OpCode == enum.OpCode.JUMPXEQKNIL
-										or OpCode == enum.OpCode.JUMPXEQKB
-										or OpCode == enum.OpCode.JUMPXEQKN
-										or OpCode == enum.OpCode.JUMPXEQKS then
-											Statement = Statement:Value()
+											if OpCode == enum.OpCode.JUMPIF 
+											or OpCode == enum.OpCode.JUMPIFNOT
+											or OpCode == enum.OpCode.JUMPIFEQ 
+											or OpCode == enum.OpCode.JUMPIFNOTEQ 
+											or OpCode == enum.OpCode.JUMPIFNOTLT
+											or OpCode == enum.OpCode.JUMPIFLT
+											or OpCode == enum.OpCode.JUMPIFNOTLE
+											or OpCode == enum.OpCode.JUMPIFLE
+											or OpCode == enum.OpCode.JUMPXEQKNIL
+											or OpCode == enum.OpCode.JUMPXEQKB
+											or OpCode == enum.OpCode.JUMPXEQKN
+											or OpCode == enum.OpCode.JUMPXEQKS then
+												Statement = Statement:Value()
 
-											if Statement:IsA("IfElse") then
-												ifStatement._elseBody = Statement
+												if Statement:IsA("IfElse") then
+													ifStatement._elseBody = Statement
 
-												ifStatement._elseBody._elseIf = true
+													ifStatement._elseBody._elseIf = true
+												end
 											end
 										end
 									end
+								elseif NextCode == enum.OpCode.JUMPBACK then -- while loop
+									increment = increment + 1
+
+									local statement = While:new(ifStatement, Block)
+
+									Block:AddStatement(properties.Name, OpCode, statement, n_index)
+									
+									return
+								elseif NextCode == OpCode then
+									--print("UH", ifStatement._output, NextCode, OpCode, properties.Name)
 								end
-							elseif NextCode == enum.OpCode.JUMPBACK then -- while loop
-								increment = increment + 1
-
-								local statement = While:new(ifStatement, Block)
-
-								Block:AddStatement(properties.Name, OpCode, statement, n_index)
-								
-								return
-							elseif NextCode == OpCode then
-								--print("UH", ifStatement._output, NextCode, OpCode, properties.Name)
+							else
+								print("Next Instruction not found", func, n_index)
 							end
 
 							Block:AddStatement(properties.Name, OpCode, ifStatement, index)
@@ -5361,9 +5378,34 @@ local function disassemble(scr, newSettings)
 				elseif (constant:Type() == enum.ConstantType.Bool) then
 					return constant:Value()
 				elseif (constant:Type() == enum.ConstantType.Number) then
-					return constant:Value()
+					local value = constant:Value()
+
+					if value ~= value then
+						value = "(0/0)"
+					elseif value >= math.huge then
+						value = "(1/0)"
+					elseif value <= -math.huge then
+						value = "(-1/0)"
+					end
+
+					return value
 				elseif (constant:Type() == enum.ConstantType.String) then
-					return '"' .. constant:Value() .. '"'
+					return '"' .. 
+					constant:Value()
+					:gsub("\\", "\\\\")   -- Escape backslashes
+					:gsub("\n", "\\n")    -- Escape newlines
+					:gsub("\r", "\\r")    -- Escape carriage returns
+					:gsub("\"", "\\\"")   -- Escape double quotes
+					:gsub("\'", "\\\'")   -- Escape single quotes
+					:gsub("\t", "\\t")    -- Escape tabs
+					:gsub("\v", "\\v")    -- Escape vertical tabs
+					:gsub("\a", "\\a")    -- Escape bell
+					:gsub("\b", "\\b")    -- Escape backspace
+					:gsub("\f", "\\f")    -- Escape form feed
+					:gsub("%c", function(c) -- Escape other control characters
+						return string.format("\\x%02X", string.byte(c))
+					end)
+					 .. '"'
 				elseif (constant:Type() == enum.ConstantType.Import) then
 					local import = ""
 
@@ -5484,6 +5526,7 @@ local function disassemble(scr, newSettings)
 		return Decompile:Output()
 	end
 end
+
 
 
 return disassemble
